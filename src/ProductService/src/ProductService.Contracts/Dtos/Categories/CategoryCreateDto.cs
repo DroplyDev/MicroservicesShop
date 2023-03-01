@@ -2,12 +2,12 @@
 
 namespace ProductService.Contracts.Dtos.Categories;
 
-public class CategoryCreateDto
+public sealed class CategoryCreateDto
 {
-    public string Name { get; set; } = null!;
+	public string Name { get; set; } = null!;
 
-    public string? Description { get; set; }
-    public IFormFile? ThumbnailImage { get; set; }
+	public string? Description { get; set; }
+	public IFormFile? ThumbnailImage { get; set; }
 
-    public byte[]? Icon { get; set; }
+	public byte[]? Icon { get; set; }
 }

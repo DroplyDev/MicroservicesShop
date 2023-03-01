@@ -54,9 +54,9 @@ public class CategoriesController : BaseApiController
 	[HttpGet("{id:int}")]
 	public async Task<IActionResult> GetCategoryByIdAsync([SwaggerParameter("The category id")] int id, CancellationToken cancellationToken)
 	{
-		var Category = await _productRepo.GetByIdAsync(id, cancellationToken) ??
+		var category = await _productRepo.GetByIdAsync(id, cancellationToken) ??
 					   throw new EntityNotFoundByIdException<Category>(id);
-		return Ok(Category.Adapt<CategoryDto>());
+		return Ok(category.Adapt<CategoryDto>());
 	}
 	[SwaggerOperation(
 		Summary = "Get Category to update by id",
@@ -104,9 +104,8 @@ public class CategoriesController : BaseApiController
 	[HttpPut("{id:int}")]
 	public async Task<IActionResult> UpdateCategoryAsync([SwaggerParameter("The category id")] int id, CategoryUpdateDto dto)
 	{
-		var category =
-			await _productRepo.FirstOrDefaultAsync(u => u.Id == id, default, includes => includes.AsTracking()) ??
-			throw new EntityNotFoundByIdException<Category>(id);
+		var category = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == id) ??
+					   throw new EntityNotFoundByIdException<Category>(id);
 		dto.Adapt(category);
 		await _productRepo.SaveChangesAsync();
 		return NoContent();

@@ -1,7 +1,7 @@
 ﻿namespace ProductService.Contracts.Dtos.ProductImage;
 
-public class ProductImageDto
+public sealed record ProductImageDto
 {
-    public int Id { get; set; }
-    public byte[] Icon { get; set; } = null!;
+	public int Id { get; set; }
+	public byte[] Icon { get; set; } = null!;
 }

@@ -3,7 +3,7 @@ using ProductService.Contracts.Dtos.ProductImage;
 
 namespace ProductService.Contracts.Dtos.Products;
 
-public class ProductCreateDto
+public sealed class ProductCreateDto
 {
 	public string Name { get; set; } = null!;
 

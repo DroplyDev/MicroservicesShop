@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProductService.Application.Repositories;
-using ProductService.Application.Services;
 using ProductService.Contracts.Dtos.Products;
 using ProductService.Domain.Exceptions.Domain;
 using ProductService.Infrastructure.Database;
@@ -282,7 +281,6 @@ internal static class DependencyInjection
 
 	internal static IServiceCollection AddServices(this IServiceCollection services)
 	{
-		services.AddScoped<IFileManagerService, FileManagerService>();
 		return services;
 	}
 
