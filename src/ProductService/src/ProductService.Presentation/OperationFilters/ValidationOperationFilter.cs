@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace ProductService.Presentation.OperationFilters;
 
 /// <summary>
-/// Filter that generates responses for validation
+///     Filter that generates responses for validation
 /// </summary>
 /// <seealso cref="Swashbuckle.AspNetCore.SwaggerGen.IOperationFilter" />
 public sealed class ValidationOperationFilter : IOperationFilter

@@ -13,7 +13,6 @@ public static class DbInitializer
     public static async Task InitializeDatabaseDataAsync(this IServiceProvider services)
     {
         await using var scope = services.CreateAsyncScope();
-
     }
 
 
@@ -34,8 +33,8 @@ public static class DbInitializer
 
 
     private static string LoremIpsum(int minWords, int maxWords,
-                                     int minSentences, int maxSentences,
-                                     int numParagraphs)
+        int minSentences, int maxSentences,
+        int numParagraphs)
     {
         var words = new[]
         {
@@ -52,17 +51,17 @@ public static class DbInitializer
         var result = new StringBuilder();
 
         for (var p = 0; p < numParagraphs; p++)
-            for (var s = 0; s < numSentences; s++)
+        for (var s = 0; s < numSentences; s++)
+        {
+            for (var w = 0; w < numWords; w++)
             {
-                for (var w = 0; w < numWords; w++)
-                {
-                    if (w > 0)
-                        result.Append(" ");
-                    result.Append(words[rand.Next(words.Length)]);
-                }
-
-                result.Append(". ");
+                if (w > 0)
+                    result.Append(" ");
+                result.Append(words[rand.Next(words.Length)]);
             }
+
+            result.Append(". ");
+        }
 
         return result.ToString();
     }

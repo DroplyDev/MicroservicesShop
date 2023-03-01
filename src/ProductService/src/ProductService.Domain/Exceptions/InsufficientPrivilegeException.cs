@@ -1,5 +1,7 @@
 #region
+
 using Serilog.Events;
+
 #endregion
 
 

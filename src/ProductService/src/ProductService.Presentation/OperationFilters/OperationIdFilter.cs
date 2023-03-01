@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace ProductService.Presentation.OperationFilters;
 
 /// <summary>
-/// Filter that sets method name as operation id
+///     Filter that sets method name as operation id
 /// </summary>
 /// <seealso cref="Swashbuckle.AspNetCore.SwaggerGen.IOperationFilter" />
 public sealed class OperationIdFilter : IOperationFilter

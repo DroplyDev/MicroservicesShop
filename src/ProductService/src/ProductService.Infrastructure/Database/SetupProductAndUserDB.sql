@@ -70,15 +70,15 @@ USE ProductMicroserviceDB
 		(
 			[Id] int IDENTITY(1,1) PRIMARY KEY CLUSTERED,
 			[Name] varchar(50) INDEX ix_name NONCLUSTERED NOT NULL,
-			[Description] varchar(50),
+			[Description] varchar(500),
 			[Icon] image,
 		)
 
 		CREATE TABLE [Products]
 		(
 			[Id] int IDENTITY(1,1) PRIMARY KEY CLUSTERED,
-			[Name] varchar(50) INDEX ix_name NONCLUSTERED,
-			[Description] varchar(50),
+			[Name] varchar(50) NOT NULL INDEX ix_name NONCLUSTERED,
+			[Description] varchar(500),
 			[Quantity] int NOT NULL,
 			[Price] decimal NOT NULL,
 			[Thumbnail] image,

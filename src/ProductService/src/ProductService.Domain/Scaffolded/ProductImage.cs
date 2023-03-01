@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ProductService.Domain;
+﻿namespace ProductService.Domain;
 
 public partial class ProductImage
 {
@@ -11,5 +8,8 @@ public partial class ProductImage
 
     public int ProductId { get; set; }
 
+    /// <summary>
+    ///     Many to one navigation for Product table
+    /// </summary>
     public virtual Product Product { get; set; } = null!;
 }

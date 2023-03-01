@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace ProductService.Contracts.Responses;
 
 /// <summary>
-/// ApiValidationResult
+///     ApiValidationResult
 /// </summary>
 public sealed class ApiValidationResult : ValidationResult
 {

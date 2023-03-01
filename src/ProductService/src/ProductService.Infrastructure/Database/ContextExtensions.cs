@@ -10,7 +10,7 @@ namespace ProductService.Infrastructure.Database;
 public static class ContextExtensions
 {
     public static void ApplyGlobalFilters<T>(this ModelBuilder
-                                                 modelBuilder, string propertyName, T value)
+        modelBuilder, string propertyName, T value)
     {
         var entityTypes = modelBuilder.Model.GetEntityTypes().ToList();
         foreach (var entityType in entityTypes)

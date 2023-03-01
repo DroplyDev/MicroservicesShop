@@ -45,7 +45,7 @@ public partial class AppDbContext
     }
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
-                                               CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default)
     {
         UpdateDefaultActionStatuses();
         return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);

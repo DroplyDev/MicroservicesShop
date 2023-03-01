@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region
+
 using Microsoft.EntityFrameworkCore;
 using ProductService.Domain;
+
+#endregion
 
 namespace ProductService.Infrastructure.Database;
 
@@ -12,17 +14,17 @@ public partial class AppDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Category> Categories { get; set; }
+    public virtual DbSet<Category> Categories { get; set; } = null!;
 
-    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<Product> Products { get; set; } = null!;
 
-    public virtual DbSet<ProductImage> ProductImages { get; set; }
+    public virtual DbSet<ProductImage> ProductImages { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Categori__3214EC079DA4EAE2");
+            entity.HasKey(e => e.Id).HasName("PK__Categori__3214EC07876DAFC8");
 
             entity.HasIndex(e => e.Name, "ix_name");
 
@@ -37,7 +39,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Products__3214EC0735D9C9F3");
+            entity.HasKey(e => e.Id).HasName("PK__Products__3214EC0724C7A40D");
 
             entity.HasIndex(e => e.Name, "ix_name");
 
@@ -58,7 +60,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<ProductImage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ProductI__3214EC0761367778");
+            entity.HasKey(e => e.Id).HasName("PK__ProductI__3214EC078CB5F076");
 
             entity.Property(e => e.Icon).HasColumnType("image");
 

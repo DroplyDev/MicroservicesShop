@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace ProductService.Presentation.Controllers;
 
 /// <summary>
-/// Base api controller
+///     Base api controller
 /// </summary>
 /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
 [ApiController]

@@ -1,7 +1,3 @@
-#region
-
-#endregion
-
 using Serilog.Events;
 
 namespace ProductService.Domain.Exceptions.Entity;

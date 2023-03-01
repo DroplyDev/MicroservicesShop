@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ProductService.Domain;
+﻿namespace ProductService.Domain;
 
 public partial class Category
 {
@@ -13,5 +10,8 @@ public partial class Category
 
     public byte[]? Icon { get; set; }
 
-    public virtual ICollection<Product> Products { get; } = new List<Product>();
+    /// <summary>
+    ///     One to many navigation for Product table
+    /// </summary>
+    public virtual ICollection<Product> Products { get; } = new HashSet<Product>();
 }

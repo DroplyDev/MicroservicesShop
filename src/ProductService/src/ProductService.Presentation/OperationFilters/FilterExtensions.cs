@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace ProductService.Presentation.OperationFilters;
 
 /// <summary>
-/// Filter extensions
+///     Filter extensions
 /// </summary>
 public static class FilterExtensions
 {
@@ -21,8 +21,8 @@ public static class FilterExtensions
     /// <param name="mediaType">Type of the media.</param>
     /// <returns></returns>
     public static bool TryAddResponse<TContent>(this OpenApiOperation operation, OperationFilterContext context,
-                                                int statusCode, string description,
-                                                string mediaType = "application/json")
+        int statusCode, string description,
+        string mediaType = "application/json")
     {
         var responseType = typeof(TContent);
         if (!context.SchemaRepository.Schemas.TryGetValue(responseType.Name, out var responseSchema))
@@ -37,7 +37,7 @@ public static class FilterExtensions
         {
             Description = description
         };
-        response.Content.TryAdd(mediaType, new OpenApiMediaType { Schema = responseSchema });
+        response.Content.TryAdd(mediaType, new OpenApiMediaType {Schema = responseSchema});
         return operation.Responses.TryAdd(statusCode.ToString(), response);
     }
 
