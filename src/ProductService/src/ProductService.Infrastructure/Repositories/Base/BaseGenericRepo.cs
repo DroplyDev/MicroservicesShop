@@ -28,7 +28,7 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseRepo<TEn
 
 	public async Task<TEntity?> GetByIdAsync(object id, CancellationToken cancellationToken = default)
 	{
-		return await DbSet.FindAsync(new[] { id }, cancellationToken);
+		return await DbSet.FindAsync(new[] {id}, cancellationToken);
 	}
 
 	public TEntity? GetById(object id)
@@ -111,7 +111,7 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseRepo<TEn
 	public async Task DeleteAsync(object id)
 	{
 		var entity = await GetByIdAsync(id, CancellationToken.None)
-					 ?? throw new EntityNotFoundByIdException<TEntity>(id);
+		             ?? throw new EntityNotFoundByIdException<TEntity>(id);
 
 		DeleteNoSave(entity);
 		await SaveChangesAsync();
@@ -145,7 +145,7 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseRepo<TEn
 
 	public virtual async Task<bool> ExistsAsync(TEntity entity, CancellationToken cancellationToken = default)
 	{
-		return await DbSet.FindAsync(new object[] { entity }, cancellationToken) is not null;
+		return await DbSet.FindAsync(new object[] {entity}, cancellationToken) is not null;
 	}
 
 
@@ -167,8 +167,6 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseRepo<TEn
 	{
 		return !await DbSet.AnyAsync(expression, cancellationToken);
 	}
-
-
 
 
 	public async Task<int> SaveChangesAsync()

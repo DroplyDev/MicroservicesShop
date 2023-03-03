@@ -5,5 +5,5 @@ namespace ProductService.Application.Repositories;
 
 public interface ICategoryRepo : IBaseRepo<Category>
 {
-    Task<Category?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
+	Task<Category?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
 }

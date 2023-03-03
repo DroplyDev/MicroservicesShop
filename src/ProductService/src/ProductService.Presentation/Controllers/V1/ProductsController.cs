@@ -2,8 +2,6 @@
 
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NuGet.ProjectModel;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Products;
 using ProductService.Contracts.Requests.Pagination;
@@ -11,10 +9,8 @@ using ProductService.Contracts.Responses;
 using ProductService.Domain;
 using ProductService.Domain.Exceptions.Entity;
 using ProductService.Infrastructure.Attributes;
-using ProductService.Infrastructure.Repositories.Specific;
-using Swashbuckle.AspNetCore.Annotations;
-using System.IO;
 using ProductService.Infrastructure.Services;
+using Swashbuckle.AspNetCore.Annotations;
 
 #endregion
 
@@ -57,7 +53,8 @@ public sealed class ProductsController : BaseApiController
 		typeof(ApiExceptionResponse)
 	)]
 	[HttpGet("{id:int}")]
-	public async Task<IActionResult> GetProductByIdAsync([SwaggerParameter("The product id")] int id, CancellationToken cancellationToken)
+	public async Task<IActionResult> GetProductByIdAsync([SwaggerParameter("The product id")] int id,
+		CancellationToken cancellationToken)
 	{
 		var product = await _productRepo.GetByIdAsync(id, cancellationToken) ??
 					  throw new EntityNotFoundByIdException<Product>(id);
@@ -76,7 +73,8 @@ public sealed class ProductsController : BaseApiController
 		typeof(ApiExceptionResponse)
 	)]
 	[HttpGet("update/{id:int}")]
-	public async Task<IActionResult> GetProductToUpdateByIdAsync([SwaggerParameter("The product id")] int id, CancellationToken cancellationToken)
+	public async Task<IActionResult> GetProductToUpdateByIdAsync([SwaggerParameter("The product id")] int id,
+		CancellationToken cancellationToken)
 	{
 		var product = await _productRepo.GetByIdAsync(id, cancellationToken) ??
 					  throw new EntityNotFoundByIdException<Product>(id);
@@ -105,7 +103,8 @@ public sealed class ProductsController : BaseApiController
 	)]
 	[HttpPut("{id:int}")]
 	[HttpPutIdCompare]
-	public async Task<IActionResult> UpdateProductAsync([SwaggerParameter("The product id")] int id, ProductUpdateDto dto)
+	public async Task<IActionResult> UpdateProductAsync([SwaggerParameter("The product id")] int id,
+		ProductUpdateDto dto)
 	{
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == id) ??
 					  throw new EntityNotFoundByIdException<Product>(id);
@@ -125,9 +124,50 @@ public sealed class ProductsController : BaseApiController
 		typeof(ApiExceptionResponse)
 	)]
 	[HttpDelete("{id:int}")]
-	public async Task<IActionResult> DeleteProductAsync(int id)
+	public async Task<IActionResult> DeleteProductAsync([SwaggerParameter("The product id")] int id)
 	{
 		await _productRepo.DeleteAsync(id);
+		return NoContent();
+	}
+	[SwaggerOperation(Summary = "Add thumbnail",
+		Description = "Adds thumbnail for an existing product"
+	)]
+	[SwaggerResponse(StatusCodes.Status404NotFound,
+		"Product with id was not found",
+		typeof(ApiExceptionResponse)
+	)]
+	[SwaggerResponse(StatusCodes.Status204NoContent,
+		"Thumbnail updated successfully"
+	)]
+	[HttpPost("{productId:int}/thumbnail")]
+	[ImageExtensionFilter]
+	public async Task<IActionResult> CreateThumbnailForProductAsync([SwaggerParameter("The product id")] int productId,
+		IFormFile image)
+	{
+		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
+					  throw new EntityNotFoundByIdException<Product>(productId);
+		product.Thumbnail = await FileManagerService.FormFileToByteArrayAsync(image);
+		await _productRepo.SaveChangesAsync();
+		return NoContent();
+	}
+
+	[SwaggerOperation(Summary = "Delete thumbnail",
+		Description = "Deletes thumbnail for a specific product"
+	)]
+	[SwaggerResponse(StatusCodes.Status404NotFound,
+		"Product with id was not found",
+		typeof(ApiExceptionResponse)
+	)]
+	[SwaggerResponse(StatusCodes.Status204NoContent,
+		"Thumbnail deleted successfully"
+	)]
+	[HttpDelete("{productId:int}/thumbnail")]
+	public async Task<IActionResult> DeleteThumbnailForProductAsync([SwaggerParameter("The product id")] int productId)
+	{
+		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
+					  throw new EntityNotFoundByIdException<Product>(productId);
+		product.Thumbnail = null;
+		await _productRepo.SaveChangesAsync();
 		return NoContent();
 	}
 }

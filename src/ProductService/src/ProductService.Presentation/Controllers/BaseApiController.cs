@@ -2,16 +2,13 @@
 
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Contracts.Responses;
+using ProductService.Infrastructure.Attributes;
 using Swashbuckle.AspNetCore.Annotations;
 
 #endregion
 
 namespace ProductService.Presentation.Controllers;
 
-/// <summary>
-///     Base api controller
-/// </summary>
-/// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 [Produces("application/json")]

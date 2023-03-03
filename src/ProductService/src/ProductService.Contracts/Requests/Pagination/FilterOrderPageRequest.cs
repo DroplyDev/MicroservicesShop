@@ -12,6 +12,6 @@ namespace ProductService.Contracts.Requests.Pagination;
 /// </summary>
 public sealed class FilterOrderPageRequest : OrderedPagedRequest
 {
-    /// <summary>Filter data class.</summary>
-    public FilterData? FilterData { get; init; }
+	/// <summary>Filter data class.</summary>
+	public FilterData? FilterData { get; init; }
 }

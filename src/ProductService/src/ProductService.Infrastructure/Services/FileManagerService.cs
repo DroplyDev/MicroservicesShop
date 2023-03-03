@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using ProductService.Domain;
 
 namespace ProductService.Infrastructure.Services;
+
 public static class FileManagerService
 {
 	public static async Task<byte[]> FormFileToByteArrayAsync(IFormFile file)

@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using ProductService.Contracts.Dtos.ProductImage;
-
-namespace ProductService.Contracts.Dtos.Products;
+﻿namespace ProductService.Contracts.Dtos.Products;
 
 public sealed class ProductCreateDto
 {

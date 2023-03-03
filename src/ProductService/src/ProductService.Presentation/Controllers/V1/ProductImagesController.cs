@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mapster;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.ProductImage;
@@ -20,8 +15,8 @@ namespace ProductService.Presentation.Controllers.V1;
 [ApiVersion("1.0", Deprecated = false)]
 public sealed class ProductImagesController : BaseApiController
 {
-	private readonly IProductRepo _productRepo;
 	private readonly IProductImageRepo _productImageRepo;
+	private readonly IProductRepo _productRepo;
 
 	public ProductImagesController(IProductRepo productRepo, IProductImageRepo productImageRepo)
 	{
@@ -41,53 +36,14 @@ public sealed class ProductImagesController : BaseApiController
 		"Images retrieved successfully",
 		typeof(List<ProductImageDto>)
 	)]
+	[HttpGet]
 	public async Task<IActionResult> GetProductImages(int productId, CancellationToken cancellationToken)
 	{
 		if (!await _productRepo.ExistsAsync(productId, cancellationToken))
 			throw new EntityNotFoundByIdException<Product>(productId);
-		var productImages = await _productImageRepo.Where(pi => pi.ProductId == productId).ProjectToType<ProductImageDto>().ToListAsync(cancellationToken);
+		var productImages = await _productImageRepo.Where(pi => pi.ProductId == productId)
+			.ProjectToType<ProductImageDto>().ToListAsync(cancellationToken);
 		return Ok(productImages);
-	}
-
-	[SwaggerOperation(Summary = "Add thumbnail",
-	Description = "Adds thumbnail for an existing product"
-	)]
-	[SwaggerResponse(StatusCodes.Status404NotFound,
-	"Product with id was not found",
-	typeof(ApiExceptionResponse)
-	)]
-	[SwaggerResponse(StatusCodes.Status204NoContent,
-	"Thumbnail updated successfully"
-	)]
-	[HttpPost("{productId:int}/thumbnail")]
-	[ImageExtensionFilter]
-	public async Task<IActionResult> CreateThumbnailForProductAsync([SwaggerParameter("The product id")] int productId, IFormFile image)
-	{
-		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
-					  throw new EntityNotFoundByIdException<Product>(productId);
-		product.Thumbnail = await FileManagerService.FormFileToByteArrayAsync(image);
-		await _productRepo.SaveChangesAsync();
-		return NoContent();
-	}
-
-	[SwaggerOperation(Summary = "Delete thumbnail",
-		Description = "Deletes thumbnail for a specific product"
-	)]
-	[SwaggerResponse(StatusCodes.Status404NotFound,
-		"Product with id was not found",
-		typeof(ApiExceptionResponse)
-	)]
-	[SwaggerResponse(StatusCodes.Status204NoContent,
-		"Thumbnail deleted successfully"
-	)]
-	[HttpDelete("{productId:int}/thumbnail")]
-	public async Task<IActionResult> DeleteThumbnailForProductAsync([SwaggerParameter("The product id")] int productId)
-	{
-		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
-					  throw new EntityNotFoundByIdException<Product>(productId);
-		product.Thumbnail = null;
-		await _productRepo.SaveChangesAsync();
-		return NoContent();
 	}
 	[SwaggerOperation(Summary = "Add image for product",
 		Description = "Adds image for an existing product"
@@ -99,9 +55,10 @@ public sealed class ProductImagesController : BaseApiController
 	[SwaggerResponse(StatusCodes.Status204NoContent,
 		"Image created successfully"
 	)]
-	[HttpPost("{productId:int}/images")]
+	[HttpPost("{productId:int}")]
 	[ImageExtensionFilter]
-	public async Task<IActionResult> CreateImageForProductAsync([SwaggerParameter("The product id")] int productId, IFormFile image)
+	public async Task<IActionResult> CreateImageForProductAsync([SwaggerParameter("The product id")] int productId,
+		IFormFile image)
 	{
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
 					  throw new EntityNotFoundByIdException<Product>(productId);
@@ -112,6 +69,7 @@ public sealed class ProductImagesController : BaseApiController
 		await _productRepo.SaveChangesAsync();
 		return NoContent();
 	}
+
 	[SwaggerOperation(Summary = "Delete image",
 		Description = "Deletes image for a specific product"
 	)]
@@ -122,8 +80,9 @@ public sealed class ProductImagesController : BaseApiController
 	[SwaggerResponse(StatusCodes.Status204NoContent,
 		"Image deleted successfully"
 	)]
-	[HttpDelete("{productId:int}/images/{imageId:int}")]
-	public async Task<IActionResult> DeleteImageForProductAsync([SwaggerParameter("The product id")] int productId, [SwaggerParameter("The image id")] int imageId)
+	[HttpDelete("{productId:int}/{imageId:int}")]
+	public async Task<IActionResult> DeleteImageForProductAsync([SwaggerParameter("The product id")] int productId,
+		[SwaggerParameter("The image id")] int imageId)
 	{
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId, includes =>
 						  includes.Include(i => i.ProductImages.FirstOrDefault(pi => pi.Id == imageId))) ??
@@ -134,5 +93,4 @@ public sealed class ProductImagesController : BaseApiController
 		await _productRepo.SaveChangesAsync();
 		return NoContent();
 	}
-
 }

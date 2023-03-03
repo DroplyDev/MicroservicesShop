@@ -1,7 +1,6 @@
 ﻿#region
 
 using System.Linq.Expressions;
-using System.Threading;
 using Microsoft.EntityFrameworkCore;
 
 #endregion
@@ -23,7 +22,9 @@ public partial class BaseGenericRepo<TContext, TEntity> where TEntity : class wh
 	{
 		return await IncludeIfNotNull(includes).FirstOrDefaultAsync(expression, cancellationToken);
 	}
-	public async Task<TEntity> FirstOrDefaultAsTrackingAsync(Expression<Func<TEntity, bool>> expression, Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null)
+
+	public async Task<TEntity> FirstOrDefaultAsTrackingAsync(Expression<Func<TEntity, bool>> expression,
+		Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null)
 	{
 		return await IncludeIfNotNull(includes).AsTracking().FirstAsync(expression);
 	}
@@ -40,7 +41,9 @@ public partial class BaseGenericRepo<TContext, TEntity> where TEntity : class wh
 	{
 		return await IncludeIfNotNull(includes).FirstAsync(expression, cancellationToken);
 	}
-	public async Task<TEntity> FirstAsTrackingAsync(Expression<Func<TEntity, bool>> expression, Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null)
+
+	public async Task<TEntity> FirstAsTrackingAsync(Expression<Func<TEntity, bool>> expression,
+		Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null)
 	{
 		return await IncludeIfNotNull(includes).AsTracking().FirstAsync(expression);
 	}

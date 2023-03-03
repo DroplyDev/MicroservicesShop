@@ -5,11 +5,11 @@
 /// </summary>
 public sealed class OrderByData
 {
-    /// <summary>Order property name.</summary>
-    /// <example>FieldName</example>
+	/// <summary>Order property name.</summary>
+	/// <example>FieldName</example>
 
-    public string OrderBy { get; set; } = null!;
+	public string OrderBy { get; set; } = null!;
 
-    /// <summary>Order direction enum.</summary>
-    public OrderDirection OrderDirection { get; set; }
+	/// <summary>Order direction enum.</summary>
+	public OrderDirection OrderDirection { get; set; }
 }

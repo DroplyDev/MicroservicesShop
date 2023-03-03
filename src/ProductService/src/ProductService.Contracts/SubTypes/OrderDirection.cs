@@ -5,9 +5,9 @@
 /// </summary>
 public enum OrderDirection
 {
-    /// <summary>The ascending direction</summary>
-    Asc,
+	/// <summary>The ascending direction</summary>
+	Asc,
 
-    /// <summary>The descending direction</summary>
-    Desc
+	/// <summary>The descending direction</summary>
+	Desc
 }

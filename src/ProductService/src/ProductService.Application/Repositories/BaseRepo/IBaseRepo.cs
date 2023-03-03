@@ -82,15 +82,19 @@ public partial interface IBaseRepo<TEntity> where TEntity : class
 		CancellationToken cancellationToken = default,
 		Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes =
 			null);
+
 	Task<TEntity> FirstOrDefaultAsTrackingAsync(Expression<Func<TEntity, bool>> expression,
 		Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null);
+
 	TEntity First(Expression<Func<TEntity, bool>> expression,
 		Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null);
 
 	Task<TEntity> FirstAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default,
 		Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null);
+
 	Task<TEntity> FirstAsTrackingAsync(Expression<Func<TEntity, bool>> expression,
 		Func<IQueryable<TEntity>, IQueryable<TEntity>>? includes = null);
+
 	#endregion
 
 	#region GetAll

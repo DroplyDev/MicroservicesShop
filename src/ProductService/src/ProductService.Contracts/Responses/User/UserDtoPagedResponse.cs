@@ -10,4 +10,4 @@ namespace ProductService.Contracts.Responses.User;
 ///     User paged payload response
 /// </summary>
 public sealed record UserDtoPagedResponse(IEnumerable<ProductDto> Data, int TotalCount)
-    : PagedResponse<ProductDto>(Data, TotalCount);
+	: PagedResponse<ProductDto>(Data, TotalCount);

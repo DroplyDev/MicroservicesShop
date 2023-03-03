@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Infrastructu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Presentation", "src\ProductService.Presentation\ProductService.Presentation.csproj", "{AD9E6422-64A7-4CD6-9BA1-64B8D05E0BE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductService.Tests.Integration", "ProductService.Tests.Integration\ProductService.Tests.Integration.csproj", "{F88E541D-3474-4C34-BEE5-1331C4458A08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Tests.Integration", "ProductService.Tests.Integration\ProductService.Tests.Integration.csproj", "{F88E541D-3474-4C34-BEE5-1331C4458A08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductService.Tests.Unit", "ProductService.Tests.Unit\ProductService.Tests.Unit.csproj", "{62EF00FE-9710-42D7-9325-F71F2C250264}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Tests.Unit", "ProductService.Tests.Unit\ProductService.Tests.Unit.csproj", "{62EF00FE-9710-42D7-9325-F71F2C250264}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcelotApiGateway", "OcelotApiGateway\OcelotApiGateway.csproj", "{B09B740C-0333-4013-81DA-ABC7F805B24A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{62EF00FE-9710-42D7-9325-F71F2C250264}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62EF00FE-9710-42D7-9325-F71F2C250264}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62EF00FE-9710-42D7-9325-F71F2C250264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B09B740C-0333-4013-81DA-ABC7F805B24A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B09B740C-0333-4013-81DA-ABC7F805B24A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B09B740C-0333-4013-81DA-ABC7F805B24A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B09B740C-0333-4013-81DA-ABC7F805B24A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

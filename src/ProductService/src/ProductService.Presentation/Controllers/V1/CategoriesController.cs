@@ -1,6 +1,5 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Categories;
 using ProductService.Contracts.Requests.Pagination;
@@ -52,12 +51,14 @@ public class CategoriesController : BaseApiController
 		typeof(ApiExceptionResponse)
 	)]
 	[HttpGet("{id:int}")]
-	public async Task<IActionResult> GetCategoryByIdAsync([SwaggerParameter("The category id")] int id, CancellationToken cancellationToken)
+	public async Task<IActionResult> GetCategoryByIdAsync([SwaggerParameter("The category id")] int id,
+		CancellationToken cancellationToken)
 	{
 		var category = await _productRepo.GetByIdAsync(id, cancellationToken) ??
-					   throw new EntityNotFoundByIdException<Category>(id);
+		               throw new EntityNotFoundByIdException<Category>(id);
 		return Ok(category.Adapt<CategoryDto>());
 	}
+
 	[SwaggerOperation(
 		Summary = "Get Category to update by id",
 		Description = "Returns Category dto for update"
@@ -73,12 +74,14 @@ public class CategoriesController : BaseApiController
 		typeof(ApiExceptionResponse)
 	)]
 	[HttpGet("update/{id:int}")]
-	public async Task<IActionResult> GetCategoryToUpdateByIdAsync([SwaggerParameter("The category id")] int id, CancellationToken cancellationToken)
+	public async Task<IActionResult> GetCategoryToUpdateByIdAsync([SwaggerParameter("The category id")] int id,
+		CancellationToken cancellationToken)
 	{
 		var category = await _productRepo.GetByIdAsync(id, cancellationToken) ??
-					   throw new EntityNotFoundByIdException<Category>(id);
+		               throw new EntityNotFoundByIdException<Category>(id);
 		return Ok(category.Adapt<CategoryUpdateDto>());
 	}
+
 	[SwaggerOperation(
 		Summary = "Create new Category",
 		Description = "Creates new Category"
@@ -91,7 +94,7 @@ public class CategoriesController : BaseApiController
 	public async Task<IActionResult> CreateCategoryAsync(CategoryCreateDto dto)
 	{
 		var category = await _productRepo.CreateAsync(dto.Adapt<Category>());
-		return CreatedAtAction("GetCategoryById", new { id = category.Id }, category.Adapt<CategoryDto>());
+		return CreatedAtAction("GetCategoryById", new {id = category.Id}, category.Adapt<CategoryDto>());
 	}
 
 	[SwaggerOperation(
@@ -102,10 +105,11 @@ public class CategoriesController : BaseApiController
 		StatusCodes.Status204NoContent, "Category updated successfully"
 	)]
 	[HttpPut("{id:int}")]
-	public async Task<IActionResult> UpdateCategoryAsync([SwaggerParameter("The category id")] int id, CategoryUpdateDto dto)
+	public async Task<IActionResult> UpdateCategoryAsync([SwaggerParameter("The category id")] int id,
+		CategoryUpdateDto dto)
 	{
 		var category = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == id) ??
-					   throw new EntityNotFoundByIdException<Category>(id);
+		               throw new EntityNotFoundByIdException<Category>(id);
 		dto.Adapt(category);
 		await _productRepo.SaveChangesAsync();
 		return NoContent();

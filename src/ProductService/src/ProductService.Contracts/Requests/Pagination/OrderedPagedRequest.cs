@@ -13,9 +13,9 @@ namespace Rusty.Template.Contracts.Requests;
 /// </summary>
 public class OrderedPagedRequest
 {
-    /// <summary>Page data class.</summary>
-    public PageData? PageData { get; init; }
+	/// <summary>Page data class.</summary>
+	public PageData? PageData { get; init; }
 
-    /// <summary>Order by data class.</summary>
-    public OrderByData OrderByData { get; init; } = null!;
+	/// <summary>Order by data class.</summary>
+	public OrderByData OrderByData { get; init; } = null!;
 }

@@ -5,5 +5,5 @@ namespace ProductService.Application.Repositories;
 
 public interface IProductRepo : IBaseRepo<Product>
 {
-    Task<Product?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
+	Task<Product?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
 }

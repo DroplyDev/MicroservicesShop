@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using System.Text;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Mapster;
 using MapsterMapper;
@@ -18,13 +20,10 @@ using ProductService.Infrastructure.Database;
 using ProductService.Infrastructure.Mapping;
 using ProductService.Infrastructure.Options;
 using ProductService.Infrastructure.Repositories.Specific;
-using ProductService.Infrastructure.Services;
 using ProductService.Presentation.OperationFilters;
 using ProductService.Presentation.SchemaFilters;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
-using System.Text;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Filters;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Options;
@@ -251,7 +250,12 @@ internal static class DependencyInjection
 		{
 			options.SetNotNullableIfMinLengthGreaterThenZero = true;
 		});
-		services.AddRouting(options => options.LowercaseUrls = true);
+		services.AddRouting(options =>
+		{
+			options.LowercaseUrls = true;
+			options.LowercaseQueryStrings = true;
+			options.AppendTrailingSlash = true;
+		});
 
 		return services;
 	}
@@ -276,6 +280,8 @@ internal static class DependencyInjection
 	{
 		services.AddScoped<ICategoryRepo, CategoryRepo>();
 		services.AddScoped<IProductRepo, ProductRepo>();
+		services.AddScoped<IProductImageRepo, ProductImageRepo>();
+
 		return services;
 	}
 
