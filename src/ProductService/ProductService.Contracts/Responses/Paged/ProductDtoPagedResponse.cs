@@ -4,10 +4,10 @@ using ProductService.Contracts.Dtos.Products;
 
 #endregion
 
-namespace ProductService.Contracts.Responses.User;
+namespace ProductService.Contracts.Responses.Paged;
 
 /// <summary>
 ///     User paged payload response
 /// </summary>
-public sealed record UserDtoPagedResponse(IEnumerable<ProductDto> Data, int TotalCount)
+public sealed record ProductDtoPagedResponse(IEnumerable<ProductDto> Data, int TotalCount)
 	: PagedResponse<ProductDto>(Data, TotalCount);

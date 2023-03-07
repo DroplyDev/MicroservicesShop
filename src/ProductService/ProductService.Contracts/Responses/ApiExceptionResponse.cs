@@ -14,6 +14,11 @@ public sealed record ApiExceptionResponse
 		StatusCode = statusCode;
 	}
 
+	/// <summary>Initializes a new instance of the <see cref="ApiExceptionResponse"/> class.</summary>
+	public ApiExceptionResponse()
+	{
+
+	}
 	/// <summary>Exception title.</summary>
 	/// <example>Exception</example>
 	public string Title { get; init; } = null!;

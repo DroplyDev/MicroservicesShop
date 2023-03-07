@@ -32,6 +32,11 @@ public sealed class ApiValidationResult : ValidationResult
 	{
 	}
 
+	/// <summary>Initializes a new instance of the <see cref="ApiValidationResult"/> class.</summary>
+	public ApiValidationResult() : this("")
+	{
+
+	}
 	/// <summary>
 	///     Initializes a new instance of the <see cref="T:System.ComponentModel.DataAnnotations.ValidationResult" />
 	///     class by using an error message and a list of members that have validation errors.

@@ -11,19 +11,19 @@ using ProductService.Infrastructure.Services;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ProductService.Presentation.Controllers.V1;
-
+[Route("api/v{version:apiVersion}/products")]
 [ApiVersion("1.0", Deprecated = false)]
 public sealed class ProductImagesController : BaseApiController
 {
 	private readonly IProductImageRepo _productImageRepo;
 	private readonly IProductRepo _productRepo;
-
 	public ProductImagesController(IProductRepo productRepo, IProductImageRepo productImageRepo)
 	{
-		_productRepo = productRepo;
-		_productImageRepo = productImageRepo;
+		_productRepo = productRepo ?? throw new ArgumentNullException(nameof(productRepo));
+		_productImageRepo = productImageRepo ?? throw new ArgumentNullException(nameof(productImageRepo));
 	}
 
+	#region Images
 
 	[SwaggerOperation(Summary = "Add thumbnail",
 		Description = "Adds thumbnail for an existing product"
@@ -36,7 +36,7 @@ public sealed class ProductImagesController : BaseApiController
 		"Images retrieved successfully",
 		typeof(List<ProductImageDto>)
 	)]
-	[HttpGet]
+	[HttpGet("images")]
 	public async Task<IActionResult> GetProductImages(int productId, CancellationToken cancellationToken)
 	{
 		if (!await _productRepo.ExistsAsync(productId, cancellationToken))
@@ -45,6 +45,7 @@ public sealed class ProductImagesController : BaseApiController
 			.ProjectToType<ProductImageDto>().ToListAsync(cancellationToken);
 		return Ok(productImages);
 	}
+
 	[SwaggerOperation(Summary = "Add image for product",
 		Description = "Adds image for an existing product"
 	)]
@@ -55,7 +56,7 @@ public sealed class ProductImagesController : BaseApiController
 	[SwaggerResponse(StatusCodes.Status204NoContent,
 		"Image created successfully"
 	)]
-	[HttpPost("{productId:int}")]
+	[HttpPost("{productId:int}/images")]
 	[ImageExtensionFilter]
 	public async Task<IActionResult> CreateImageForProductAsync([SwaggerParameter("The product id")] int productId,
 		IFormFile image)
@@ -80,7 +81,7 @@ public sealed class ProductImagesController : BaseApiController
 	[SwaggerResponse(StatusCodes.Status204NoContent,
 		"Image deleted successfully"
 	)]
-	[HttpDelete("{productId:int}/{imageId:int}")]
+	[HttpDelete("{productId:int}/images/{imageId:int}")]
 	public async Task<IActionResult> DeleteImageForProductAsync([SwaggerParameter("The product id")] int productId,
 		[SwaggerParameter("The image id")] int imageId)
 	{
@@ -93,4 +94,52 @@ public sealed class ProductImagesController : BaseApiController
 		await _productRepo.SaveChangesAsync();
 		return NoContent();
 	}
+
+	#endregion
+
+	#region Thumbnails
+
+	[SwaggerOperation(Summary = "Add thumbnail",
+		Description = "Adds thumbnail for an existing product"
+	)]
+	[SwaggerResponse(StatusCodes.Status404NotFound,
+		"Product with id was not found",
+		typeof(ApiExceptionResponse)
+	)]
+	[SwaggerResponse(StatusCodes.Status204NoContent,
+		"Thumbnail updated successfully"
+	)]
+	[HttpPost("{productId:int}/thumbnails")]
+	[ImageExtensionFilter]
+	public async Task<IActionResult> CreateThumbnailForProductAsync([SwaggerParameter("The product id")] int productId,
+		IFormFile image)
+	{
+		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
+					  throw new EntityNotFoundByIdException<Product>(productId);
+		product.Thumbnail = await FileManagerService.FormFileToByteArrayAsync(image);
+		await _productRepo.SaveChangesAsync();
+		return NoContent();
+	}
+
+	[SwaggerOperation(Summary = "Delete thumbnail",
+		Description = "Deletes thumbnail for a specific product"
+	)]
+	[SwaggerResponse(StatusCodes.Status404NotFound,
+		"Product with id was not found",
+		typeof(ApiExceptionResponse)
+	)]
+	[SwaggerResponse(StatusCodes.Status204NoContent,
+		"Thumbnail deleted successfully"
+	)]
+	[HttpDelete("{productId:int}/thumbnails")]
+	public async Task<IActionResult> DeleteThumbnailForProductAsync([SwaggerParameter("The product id")] int productId)
+	{
+		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
+					  throw new EntityNotFoundByIdException<Product>(productId);
+		product.Thumbnail = null;
+		await _productRepo.SaveChangesAsync();
+		return NoContent();
+	}
+
+	#endregion
 }

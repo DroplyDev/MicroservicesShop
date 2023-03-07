@@ -8,6 +8,6 @@ public abstract class BaseTests : IClassFixture<WebApiFactory>
 	protected BaseTests(WebApiFactory apiFactory)
 	{
 		ApiFactory = apiFactory;
-		//Client = new NSwagClient(apiFactory.CreateClient());
+		Client = new NSwagClient(apiFactory.CreateClient());
 	}
 }

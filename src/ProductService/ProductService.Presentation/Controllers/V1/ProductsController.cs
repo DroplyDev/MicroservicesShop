@@ -17,13 +17,13 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace ProductService.Presentation.Controllers.V1;
 
 [ApiVersion("1.0", Deprecated = false)]
-public sealed class ProductsController : BaseApiController
+public sealed class ProductsController : BaseRoutedController
 {
 	private readonly IProductRepo _productRepo;
 
 	public ProductsController(IProductRepo productRepo)
 	{
-		_productRepo = productRepo;
+		_productRepo = productRepo ?? throw new ArgumentNullException(nameof(productRepo));
 	}
 
 	[SwaggerOperation(Summary = "Get paged Products",
@@ -127,47 +127,6 @@ public sealed class ProductsController : BaseApiController
 	public async Task<IActionResult> DeleteProductAsync([SwaggerParameter("The product id")] int id)
 	{
 		await _productRepo.DeleteAsync(id);
-		return NoContent();
-	}
-	[SwaggerOperation(Summary = "Add thumbnail",
-		Description = "Adds thumbnail for an existing product"
-	)]
-	[SwaggerResponse(StatusCodes.Status404NotFound,
-		"Product with id was not found",
-		typeof(ApiExceptionResponse)
-	)]
-	[SwaggerResponse(StatusCodes.Status204NoContent,
-		"Thumbnail updated successfully"
-	)]
-	[HttpPost("{productId:int}/thumbnail")]
-	[ImageExtensionFilter]
-	public async Task<IActionResult> CreateThumbnailForProductAsync([SwaggerParameter("The product id")] int productId,
-		IFormFile image)
-	{
-		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
-					  throw new EntityNotFoundByIdException<Product>(productId);
-		product.Thumbnail = await FileManagerService.FormFileToByteArrayAsync(image);
-		await _productRepo.SaveChangesAsync();
-		return NoContent();
-	}
-
-	[SwaggerOperation(Summary = "Delete thumbnail",
-		Description = "Deletes thumbnail for a specific product"
-	)]
-	[SwaggerResponse(StatusCodes.Status404NotFound,
-		"Product with id was not found",
-		typeof(ApiExceptionResponse)
-	)]
-	[SwaggerResponse(StatusCodes.Status204NoContent,
-		"Thumbnail deleted successfully"
-	)]
-	[HttpDelete("{productId:int}/thumbnail")]
-	public async Task<IActionResult> DeleteThumbnailForProductAsync([SwaggerParameter("The product id")] int productId)
-	{
-		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
-					  throw new EntityNotFoundByIdException<Product>(productId);
-		product.Thumbnail = null;
-		await _productRepo.SaveChangesAsync();
 		return NoContent();
 	}
 }

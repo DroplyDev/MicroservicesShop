@@ -39,6 +39,7 @@
   <ItemGroup>
     <Content Update="appsettings.Production.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Always" />
     <Content Update="appsettings.Development.json" CopyToOutputDirectory="Always" CopyToPublishDirectory="Never" />
+    <None Include="appsettings.Staging.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />

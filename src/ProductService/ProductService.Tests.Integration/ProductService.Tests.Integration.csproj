@@ -31,7 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\ProductService.Contracts\ProductService.Contracts.csproj" />
+    <ProjectReference Include="..\ProductService.Contracts\ProductService.Contracts.csproj" />
+    <ProjectReference Include="..\ProductService.Domain\ProductService.Domain.csproj" />
+    <ProjectReference Include="..\ProductService.Infrastructure\ProductService.Infrastructure.csproj" />
+    <ProjectReference Include="..\ProductService.Presentation\ProductService.Presentation.csproj" />
     <ProjectReference Include="..\src\ProductService.Presentation\ProductService.Presentation.csproj" />
   </ItemGroup>
 

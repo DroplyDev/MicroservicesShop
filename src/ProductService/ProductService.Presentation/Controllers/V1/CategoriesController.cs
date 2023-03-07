@@ -11,13 +11,13 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace ProductService.Presentation.Controllers.V1;
 
 [ApiVersion("1.0", Deprecated = false)]
-public class CategoriesController : BaseApiController
+public class CategoriesController : BaseRoutedController
 {
 	private readonly ICategoryRepo _productRepo;
 
 	public CategoriesController(ICategoryRepo productRepo)
 	{
-		_productRepo = productRepo;
+		_productRepo = productRepo ?? throw new ArgumentNullException(nameof(productRepo));
 	}
 
 	[SwaggerOperation(
@@ -55,7 +55,7 @@ public class CategoriesController : BaseApiController
 		CancellationToken cancellationToken)
 	{
 		var category = await _productRepo.GetByIdAsync(id, cancellationToken) ??
-		               throw new EntityNotFoundByIdException<Category>(id);
+					   throw new EntityNotFoundByIdException<Category>(id);
 		return Ok(category.Adapt<CategoryDto>());
 	}
 
@@ -78,7 +78,7 @@ public class CategoriesController : BaseApiController
 		CancellationToken cancellationToken)
 	{
 		var category = await _productRepo.GetByIdAsync(id, cancellationToken) ??
-		               throw new EntityNotFoundByIdException<Category>(id);
+					   throw new EntityNotFoundByIdException<Category>(id);
 		return Ok(category.Adapt<CategoryUpdateDto>());
 	}
 
@@ -94,7 +94,7 @@ public class CategoriesController : BaseApiController
 	public async Task<IActionResult> CreateCategoryAsync(CategoryCreateDto dto)
 	{
 		var category = await _productRepo.CreateAsync(dto.Adapt<Category>());
-		return CreatedAtAction("GetCategoryById", new {id = category.Id}, category.Adapt<CategoryDto>());
+		return CreatedAtAction("GetCategoryById", new { id = category.Id }, category.Adapt<CategoryDto>());
 	}
 
 	[SwaggerOperation(
@@ -109,7 +109,7 @@ public class CategoriesController : BaseApiController
 		CategoryUpdateDto dto)
 	{
 		var category = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == id) ??
-		               throw new EntityNotFoundByIdException<Category>(id);
+					   throw new EntityNotFoundByIdException<Category>(id);
 		dto.Adapt(category);
 		await _productRepo.SaveChangesAsync();
 		return NoContent();
