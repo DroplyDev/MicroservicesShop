@@ -145,7 +145,7 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseRepo<TEn
 
 	public virtual async Task<bool> ExistsAsync(TEntity entity, CancellationToken cancellationToken = default)
 	{
-		return await DbSet.FindAsync(new object[] {entity}, cancellationToken) is not null;
+		return await DbSet.AnyAsync(item=>item.Equals(entity), cancellationToken);
 	}
 
 
