@@ -1,5 +1,7 @@
 ﻿#region
 
+using FluentValidation;
+using FluentValidation.Results;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Application.Repositories;
@@ -19,10 +21,16 @@ namespace ProductService.Presentation.Controllers.V1;
 public sealed class ProductsController : BaseRoutedController
 {
 	private readonly IProductRepo _productRepo;
+	private readonly IValidator<FilterOrderPageRequest> _filterOrderPageRequestValidator;
+	private readonly IValidator<ProductCreateDto> _productCreateDtoValidator;
+	private readonly IValidator<ProductUpdateDto> _productUpdateDtoValidator;
 
-	public ProductsController(IProductRepo productRepo)
+	public ProductsController(IProductRepo productRepo, IValidator<FilterOrderPageRequest> filterOrderPageRequestValidator, IValidator<ProductCreateDto> productCreateDtoValidator, IValidator<ProductUpdateDto> productUpdateDtoValidator)
 	{
 		_productRepo = productRepo ?? throw new ArgumentNullException(nameof(productRepo));
+		_filterOrderPageRequestValidator = filterOrderPageRequestValidator;
+		_productCreateDtoValidator = productCreateDtoValidator;
+		_productUpdateDtoValidator = productUpdateDtoValidator;
 	}
 
 	[SwaggerOperation(Summary = "Get paged Products",
@@ -36,6 +44,9 @@ public sealed class ProductsController : BaseRoutedController
 	public async Task<IActionResult> GetFilteredPagedProductsAsync(FilterOrderPageRequest request,
 		CancellationToken cancellationToken)
 	{
+		var validationResult = await _filterOrderPageRequestValidator.ValidateAsync(request, cancellationToken);
+		if (!validationResult.IsValid)
+			return BadRequest(new BadRequestResponse(validationResult.Errors));
 		return Ok(await _productRepo.PaginateAsync<ProductDto>(request, cancellationToken));
 	}
 
@@ -90,6 +101,10 @@ public sealed class ProductsController : BaseRoutedController
 	[HttpPost]
 	public async Task<IActionResult> CreateProductAsync(ProductCreateDto dto)
 	{
+		var validationResult = await _productCreateDtoValidator.ValidateAsync(dto);
+		if (!validationResult.IsValid)
+			return BadRequest(new BadRequestResponse(validationResult.Errors));
+
 		var product = await _productRepo.CreateAsync(dto.Adapt<Product>());
 		return CreatedAtAction("GetProductById", new { id = product.Id }, product.Adapt<ProductDto>());
 	}
@@ -105,6 +120,10 @@ public sealed class ProductsController : BaseRoutedController
 	public async Task<IActionResult> UpdateProductAsync([SwaggerParameter("The product id")] int id,
 		ProductUpdateDto dto)
 	{
+
+		var validationResult = await _productUpdateDtoValidator.ValidateAsync(dto);
+		if (!validationResult.IsValid)
+			return BadRequest(new BadRequestResponse(validationResult.Errors));
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == id) ??
 					  throw new EntityNotFoundByIdException<Product>(id);
 		dto.Adapt(product);

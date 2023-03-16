@@ -25,8 +25,7 @@ public static class FilterExtensions
 		string mediaType = "application/json")
 	{
 		var responseType = typeof(TContent);
-		if (!context.SchemaRepository.Schemas.TryGetValue(responseType.Name, out var responseSchema))
-			responseSchema = context.SchemaGenerator.GenerateSchema(responseType, context.SchemaRepository);
+		var responseSchema = context.GetOrAdd<TContent>();
 
 		responseSchema.Reference = new OpenApiReference
 		{
@@ -37,7 +36,7 @@ public static class FilterExtensions
 		{
 			Description = description
 		};
-		response.Content.TryAdd(mediaType, new OpenApiMediaType {Schema = responseSchema});
+		response.Content.TryAdd(mediaType, new OpenApiMediaType { Schema = responseSchema });
 		return operation.Responses.TryAdd(statusCode.ToString(), response);
 	}
 
@@ -53,5 +52,13 @@ public static class FilterExtensions
 			{
 				Description = description
 			});
+	}
+
+	public static OpenApiSchema GetOrAdd<TSchema>(this OperationFilterContext context)
+	{
+		var responseType = typeof(TSchema);
+		if (!context.SchemaRepository.Schemas.TryGetValue(responseType.Name, out var responseSchema))
+			responseSchema = context.SchemaGenerator.GenerateSchema(responseType, context.SchemaRepository);
+		return responseSchema;
 	}
 }

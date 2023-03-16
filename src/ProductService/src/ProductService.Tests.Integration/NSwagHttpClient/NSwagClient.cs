@@ -114,12 +114,12 @@ namespace ProductService.Tests.Integration
 						else
 						if (status_ == 400)
 						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiValidationResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
 							if (objectResponse_.Object == null)
 							{
 								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
 							}
-							throw new SwaggerException<ApiValidationResult>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
 						}
 						else
 						{
@@ -308,12 +308,12 @@ namespace ProductService.Tests.Integration
 						else
 						if (status_ == 400)
 						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiValidationResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
 							if (objectResponse_.Object == null)
 							{
 								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
 							}
-							throw new SwaggerException<ApiValidationResult>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
 						}
 						else
 						{
@@ -595,12 +595,12 @@ namespace ProductService.Tests.Integration
 						else
 						if (status_ == 400)
 						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiValidationResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
 							if (objectResponse_.Object == null)
 							{
 								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
 							}
-							throw new SwaggerException<ApiValidationResult>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
 						}
 						else
 						{
@@ -629,17 +629,17 @@ namespace ProductService.Tests.Integration
 		/// <remarks>
 		/// Adds thumbnail for an existing product
 		/// </remarks>
+		/// <param name="productId">The product id</param>
 		/// <returns>Images retrieved successfully</returns>
 		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductImageDto>> GetProductImagesAsync(int? productId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+		public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductImageDto>> GetProductImagesAsync(int productId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
 		{
+			if (productId == null)
+				throw new System.ArgumentNullException("productId");
+
 			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/images?");
-			if (productId != null)
-			{
-				urlBuilder_.Append(System.Uri.EscapeDataString("productId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-			}
-			urlBuilder_.Length--;
+			urlBuilder_.Append("api/v1/products/{productId}/images");
+			urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
 
 			var client_ = _httpClient;
 			var disposeClient_ = false;
@@ -810,12 +810,12 @@ namespace ProductService.Tests.Integration
 						else
 						if (status_ == 400)
 						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiValidationResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
 							if (objectResponse_.Object == null)
 							{
 								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
 							}
-							throw new SwaggerException<ApiValidationResult>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
 						}
 						else
 						{
@@ -1024,12 +1024,12 @@ namespace ProductService.Tests.Integration
 						else
 						if (status_ == 400)
 						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiValidationResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
 							if (objectResponse_.Object == null)
 							{
 								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
 							}
-							throw new SwaggerException<ApiValidationResult>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
 						}
 						else
 						{
@@ -1213,12 +1213,12 @@ namespace ProductService.Tests.Integration
 						else
 						if (status_ == 400)
 						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiValidationResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
 							if (objectResponse_.Object == null)
 							{
 								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
 							}
-							throw new SwaggerException<ApiValidationResult>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
 						}
 						else
 						{
@@ -1407,12 +1407,12 @@ namespace ProductService.Tests.Integration
 						else
 						if (status_ == 400)
 						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiValidationResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
 							if (objectResponse_.Object == null)
 							{
 								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
 							}
-							throw new SwaggerException<ApiValidationResult>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
 						}
 						else
 						{
@@ -1694,12 +1694,12 @@ namespace ProductService.Tests.Integration
 						else
 						if (status_ == 400)
 						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiValidationResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
 							if (objectResponse_.Object == null)
 							{
 								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
 							}
-							throw new SwaggerException<ApiValidationResult>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
 						}
 						else
 						{

@@ -30,7 +30,7 @@ using Unchase.Swashbuckle.AspNetCore.Extensions.Options;
 
 namespace ProductService.Presentation;
 
-internal static class DependencyInjection
+public static class DependencyInjection
 {
 	internal static ConfigureHostBuilder AddSerilog(this ConfigureHostBuilder host)
 	{
@@ -72,8 +72,6 @@ internal static class DependencyInjection
 	{
 		ValidatorOptions.Global.DefaultClassLevelCascadeMode = CascadeMode.Continue;
 		ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Continue;
-		services.AddFluentValidationAutoValidation(opt =>
-			opt.DisableDataAnnotationsValidation = true);
 		services.AddValidatorsFromAssemblyContaining<ProductCreateDtoValidator>();
 
 		return services;
@@ -82,7 +80,7 @@ internal static class DependencyInjection
 	internal static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
 	{
 		var authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>() ??
-		                  throw new NullReferenceException();
+						  throw new NullReferenceException();
 		services.AddCors(options =>
 		{
 			options.AddPolicy("All", builder =>
@@ -161,7 +159,7 @@ internal static class DependencyInjection
 					{
 						Title = swaggerSection["Title"],
 						Description = swaggerSection["Description"] +
-						              (description.IsDeprecated ? " [DEPRECATED]" : string.Empty),
+									  (description.IsDeprecated ? " [DEPRECATED]" : string.Empty),
 						Version = description.ApiVersion.ToString(),
 						TermsOfService = string.IsNullOrEmpty(swaggerSection["TermsOfServiceUrl"])
 							? null
@@ -198,7 +196,7 @@ internal static class DependencyInjection
 			});
 			var currentAssembly = Assembly.GetExecutingAssembly();
 			var xmlDocs = currentAssembly.GetReferencedAssemblies()
-				.Union(new[] {currentAssembly.GetName()})
+				.Union(new[] { currentAssembly.GetName() })
 				.Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location)!,
 					$"{a.Name}.xml"))
 				.Where(File.Exists).ToArray();
@@ -266,9 +264,8 @@ internal static class DependencyInjection
 		services.AddDbContext<AppDbContext>(options =>
 		{
 			var efConStr = configuration.GetConnectionString("DefaultConnection") ??
-			               throw new ConnectionStringIsNotValidException();
-			var contextOptions = options.UseSqlServer(efConStr)
-				.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+						   throw new ConnectionStringIsNotValidException();
+			var contextOptions = options.UseSqlServer(efConStr).SetDefaultDbSettings();
 			if (env.IsDevelopment())
 				contextOptions.EnableSensitiveDataLogging().EnableDetailedErrors();
 		});
@@ -298,5 +295,11 @@ internal static class DependencyInjection
 		services.AddScoped<IMapper, ServiceMapper>();
 
 		return services;
+	}
+
+	public static DbContextOptionsBuilder SetDefaultDbSettings(this DbContextOptionsBuilder builder)
+	{
+		builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+		return builder;
 	}
 }

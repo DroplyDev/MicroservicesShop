@@ -1,7 +1,7 @@
 set prefix=ProductService
 set root=..\..\
 set rootedPrefix=%root%%prefix%
-set dirPrefix=%root%%prefix%
+set dirPrefix=%root%src\%prefix%
 set project=%rootedPrefix%.Infrastructure\%prefix%.Infrastructure.csproj 
 set startupProject=%rootedPrefix%.Presentation\%prefix%.Presentation.csproj
 set configuration=Debug

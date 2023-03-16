@@ -10,3 +10,5 @@ global using ProductService.Contracts.Requests.Pagination;
 global using ProductService.Contracts.Responses.Paged;
 global using ProductService.Tests.Shared;
 #endregion
+
+[assembly: TestCollectionOrderer("ProductService.Tests.Integration.ClassOrderer", "ProductService.Tests.Integration")]

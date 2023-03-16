@@ -38,8 +38,8 @@ public sealed class ProductImagesController : BaseApiController
 		"Images retrieved successfully",
 		typeof(List<ProductImageDto>)
 	)]
-	[HttpGet("images")]
-	public async Task<IActionResult> GetProductImages(int productId, CancellationToken cancellationToken)
+	[HttpGet("{productId:int}/images")]
+	public async Task<IActionResult> GetProductImages([SwaggerParameter("The product id")] int productId, CancellationToken cancellationToken)
 	{
 		if (!await _productRepo.ExistsAsync(productId, cancellationToken))
 			throw new EntityNotFoundByIdException<Product>(productId);
@@ -64,7 +64,7 @@ public sealed class ProductImagesController : BaseApiController
 		IFormFile image)
 	{
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
-		              throw new EntityNotFoundByIdException<Product>(productId);
+					  throw new EntityNotFoundByIdException<Product>(productId);
 		product.ProductImages.Add(new ProductImage
 		{
 			Icon = await FileManagerService.FormFileToByteArrayAsync(image)
@@ -88,8 +88,8 @@ public sealed class ProductImagesController : BaseApiController
 		[SwaggerParameter("The image id")] int imageId)
 	{
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId, includes =>
-			              includes.Include(i => i.ProductImages.FirstOrDefault(pi => pi.Id == imageId))) ??
-		              throw new EntityNotFoundByIdException<Product>(productId);
+						  includes.Include(i => i.ProductImages.FirstOrDefault(pi => pi.Id == imageId))) ??
+					  throw new EntityNotFoundByIdException<Product>(productId);
 		if (product.ProductImages.Count == 0)
 			throw new EntityNotFoundByIdException<Product>(imageId);
 		product.ProductImages.Clear();
@@ -117,7 +117,7 @@ public sealed class ProductImagesController : BaseApiController
 		IFormFile image)
 	{
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
-		              throw new EntityNotFoundByIdException<Product>(productId);
+					  throw new EntityNotFoundByIdException<Product>(productId);
 		product.Thumbnail = await FileManagerService.FormFileToByteArrayAsync(image);
 		await _productRepo.SaveChangesAsync();
 		return NoContent();
@@ -137,7 +137,7 @@ public sealed class ProductImagesController : BaseApiController
 	public async Task<IActionResult> DeleteThumbnailForProductAsync([SwaggerParameter("The product id")] int productId)
 	{
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
-		              throw new EntityNotFoundByIdException<Product>(productId);
+					  throw new EntityNotFoundByIdException<Product>(productId);
 		product.Thumbnail = null;
 		await _productRepo.SaveChangesAsync();
 		return NoContent();

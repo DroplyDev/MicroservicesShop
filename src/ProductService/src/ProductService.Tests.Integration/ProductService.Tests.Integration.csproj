@@ -10,11 +10,14 @@
 
   <ItemGroup>
     <PackageReference Include="AutoBogus" Version="2.13.1" />
-    <PackageReference Include="FluentAssertions" Version="6.9.0" />
+    <PackageReference Include="AutoBogus.Conventions" Version="2.13.1" />
+    <PackageReference Include="FluentAssertions" Version="6.10.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-    <PackageReference Include="Testcontainers" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="Testcontainers" Version="3.0.0" />
+    <PackageReference Include="Testcontainers.MsSql" Version="3.0.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,9 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="TestOrder\" />
     <Folder Include="TestImages\" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ProductService.Contracts\ProductService.Contracts.csproj" />
     <ProjectReference Include="..\ProductService.Domain\ProductService.Domain.csproj" />
@@ -37,5 +40,4 @@
     <ProjectReference Include="..\ProductService.Presentation\ProductService.Presentation.csproj" />
     <ProjectReference Include="..\ProductService.Tests.Shared\ProductService.Tests.Shared.csproj" />
   </ItemGroup>
-
 </Project>

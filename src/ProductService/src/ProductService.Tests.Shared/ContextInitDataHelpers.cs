@@ -6,14 +6,20 @@ namespace ProductService.Tests.Shared;
 
 public static class ContextInitDataHelpers
 {
+	static ContextInitDataHelpers()
+	{
+
+	}
 	public static List<Category> InitCategories(this DbContext context, int count = 5)
 	{
 		var data = new AutoFaker<Category>()
-			.RuleFor(c => c.Id, s => s.IndexFaker)
+			.RuleFor(c => c.Id, _ => 0)
 			.RuleFor(c => c.Name, f => f.Commerce.Categories(1)[0])
-			.RuleFor(p => p.Description, f => f.Lorem.Sentence())
+			.RuleFor(p => p.Description, f => f.Lorem.Letter(500))
 			.Generate(count);
 		context.AddRange(data);
+		context.SaveChanges();
+
 		return data;
 	}
 
@@ -21,24 +27,28 @@ public static class ContextInitDataHelpers
 	{
 		var categories = context.InitCategories();
 		var data = new AutoFaker<Product>()
-			.RuleFor(c => c.Id, s => s.IndexFaker)
+			.RuleFor(c => c.Id, _ => 0)
 			.RuleFor(p => p.Name, f => f.Commerce.ProductName())
-			.RuleFor(p => p.Description, f => f.Commerce.ProductDescription())
+			.RuleFor(p => p.Description, f => f.Lorem.Letter(500))
 			.RuleFor(p => p.Quantity, f => f.Random.Int(1, 100))
 			.RuleFor(p => p.Price, f => f.Random.Decimal(1, 1000))
 			.Generate(count);
 		foreach (var item in data)
 			item.Category = categories.PickRandom();
 		context.AddRange(data);
+		context.SaveChanges();
+
 		return data;
 	}
 
 	public static List<ProductImage> InitProductImages(this DbContext context, int count = 5)
 	{
 		var data = new AutoFaker<ProductImage>()
-			.RuleFor(c => c.Id, s => s.IndexFaker)
+			.RuleFor(c => c.Id, _ => 0)
 			.Generate(count);
 		context.AddRange(data);
+		context.SaveChanges();
+
 		return data;
 	}
 
@@ -55,5 +65,15 @@ public static class ContextInitDataHelpers
 		if (!response.IsSuccessStatusCode)
 			throw new IOException($"Failed to download image from {url}: {response.ReasonPhrase}");
 		return await response.Content.ReadAsByteArrayAsync();
+	}
+	public static void Clear(this DbContext context)
+	{
+		context.Database.EnsureDeleted();
+		context.Database.EnsureCreated();
+	}
+	public static async Task ClearAsync(this DbContext context)
+	{
+		await context.Database.EnsureDeletedAsync();
+		await context.Database.EnsureCreatedAsync();
 	}
 }

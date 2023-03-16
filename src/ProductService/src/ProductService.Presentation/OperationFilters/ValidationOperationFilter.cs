@@ -1,5 +1,7 @@
 ﻿#region
 
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using ProductService.Contracts.Responses;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -20,9 +22,11 @@ public sealed class ValidationOperationFilter : IOperationFilter
 	public void Apply(OpenApiOperation operation, OperationFilterContext context)
 	{
 		if (context.ApiDescription.HttpMethod == "POST" || context.ApiDescription.HttpMethod == "PUT")
-			operation.TryAddResponse<ApiValidationResult>(context,
+		{
+			context.GetOrAdd<ValidationFailure>();
+			operation.TryAddResponse<BadRequestResponse>(context,
 				StatusCodes.Status400BadRequest,
-				"Model validation exception"
-			);
+				"Model validation exception");
+		}
 	}
 }
