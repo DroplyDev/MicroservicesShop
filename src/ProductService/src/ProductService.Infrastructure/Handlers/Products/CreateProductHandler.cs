@@ -33,6 +33,6 @@ public sealed record CreateProductHandler : IActionRequestHandler<CreateProductR
         }
 
         var product = await _productRepo.CreateAsync(request.Dto.Adapt<Product>());
-        return new CreatedAtRouteResult("GetProductById", new {id = product.Id}, product.Adapt<ProductDto>());
+        return new CreatedAtActionResult("GetProductById", "Products", new { id = product.Id }, product.Adapt<ProductDto>());
     }
 }

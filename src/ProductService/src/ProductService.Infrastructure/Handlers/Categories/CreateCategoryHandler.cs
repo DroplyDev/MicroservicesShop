@@ -33,6 +33,6 @@ public sealed record CreateCategoryHandler : IActionRequestHandler<CreateCategor
         }
 
         var category = await _categoryRepo.CreateAsync(request.Dto.Adapt<Category>());
-        return new CreatedAtRouteResult("GetCategoryById", new {id = category.Id}, category.Adapt<CategoryDto>());
+        return new CreatedAtActionResult("GetCategoryById", "Categories", new { id = category.Id }, category.Adapt<CategoryDto>());
     }
 }
