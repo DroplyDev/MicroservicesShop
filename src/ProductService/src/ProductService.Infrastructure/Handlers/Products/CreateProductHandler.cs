@@ -15,24 +15,24 @@ namespace ProductService.Infrastructure.Handlers.Products;
 
 public sealed record CreateProductHandler : IActionRequestHandler<CreateProductRequest>
 {
-	private readonly IProductRepo _productRepo;
-	private readonly IValidator<ProductCreateDto> _validator;
+    private readonly IProductRepo _productRepo;
+    private readonly IValidator<ProductCreateDto> _validator;
 
-	public CreateProductHandler(IProductRepo productRepo, IValidator<ProductCreateDto> validator)
-	{
-		_productRepo = productRepo;
-		_validator = validator;
-	}
+    public CreateProductHandler(IProductRepo productRepo, IValidator<ProductCreateDto> validator)
+    {
+        _productRepo = productRepo;
+        _validator = validator;
+    }
 
-	public async ValueTask<IActionResult> Handle(CreateProductRequest request, CancellationToken cancellationToken)
-	{
-		var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-		if (!validationResult.IsValid)
-		{
-			return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-		}
+    public async ValueTask<IActionResult> Handle(CreateProductRequest request, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
+        }
 
-		var product = await _productRepo.CreateAsync(request.Dto.Adapt<Product>());
-		return new CreatedAtRouteResult("GetProductById", new { id = product.Id }, product.Adapt<ProductDto>());
-	}
+        var product = await _productRepo.CreateAsync(request.Dto.Adapt<Product>());
+        return new CreatedAtRouteResult("GetProductById", new {id = product.Id}, product.Adapt<ProductDto>());
+    }
 }

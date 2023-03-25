@@ -14,23 +14,23 @@ namespace ProductService.Infrastructure.Handlers.Products;
 
 public sealed record GetPagedProductsHandler : IActionRequestHandler<GetPagedProductsRequest>
 {
-	private readonly IProductRepo _productRepo;
-	private readonly IValidator<FilterOrderPageRequest> _validator;
+    private readonly IProductRepo _productRepo;
+    private readonly IValidator<FilterOrderPageRequest> _validator;
 
-	public GetPagedProductsHandler(IProductRepo productRepo, IValidator<FilterOrderPageRequest> validator)
-	{
-		_productRepo = productRepo;
-		_validator = validator;
-	}
+    public GetPagedProductsHandler(IProductRepo productRepo, IValidator<FilterOrderPageRequest> validator)
+    {
+        _productRepo = productRepo;
+        _validator = validator;
+    }
 
-	public async ValueTask<IActionResult> Handle(GetPagedProductsRequest request, CancellationToken cancellationToken)
-	{
-		var validationResult = await _validator.ValidateAsync(request.Request, cancellationToken);
-		if (!validationResult.IsValid)
-		{
-			return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-		}
+    public async ValueTask<IActionResult> Handle(GetPagedProductsRequest request, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request.Request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
+        }
 
-		return new OkObjectResult(await _productRepo.PaginateAsync<ProductDto>(request.Request, cancellationToken));
-	}
+        return new OkObjectResult(await _productRepo.PaginateAsync<ProductDto>(request.Request, cancellationToken));
+    }
 }

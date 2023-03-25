@@ -12,16 +12,16 @@ namespace ProductService.Infrastructure.Handlers.Products;
 
 public sealed record GetProductByIdHandler : IActionRequestHandler<GetProductByIdRequest>
 {
-	private readonly IProductRepo _productRepo;
+    private readonly IProductRepo _productRepo;
 
-	public GetProductByIdHandler(IProductRepo productRepo)
-	{
-		_productRepo = productRepo;
-	}
+    public GetProductByIdHandler(IProductRepo productRepo)
+    {
+        _productRepo = productRepo;
+    }
 
-	public async ValueTask<IActionResult> Handle(GetProductByIdRequest request, CancellationToken cancellationToken)
-	{
-		var product = await _productRepo.GetByIdAsync(request.Id, cancellationToken);
-		return new OkObjectResult(product.Adapt<ProductDto>());
-	}
+    public async ValueTask<IActionResult> Handle(GetProductByIdRequest request, CancellationToken cancellationToken)
+    {
+        var product = await _productRepo.GetByIdAsync(request.Id, cancellationToken);
+        return new OkObjectResult(product.Adapt<ProductDto>());
+    }
 }

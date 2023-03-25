@@ -15,24 +15,24 @@ namespace ProductService.Infrastructure.Handlers.Categories;
 
 public sealed record CreateCategoryHandler : IActionRequestHandler<CreateCategoryRequest>
 {
-	private readonly ICategoryRepo _categoryRepo;
-	private readonly IValidator<CategoryCreateDto> _validator;
+    private readonly ICategoryRepo _categoryRepo;
+    private readonly IValidator<CategoryCreateDto> _validator;
 
-	public CreateCategoryHandler(ICategoryRepo categoryRepo, IValidator<CategoryCreateDto> validator)
-	{
-		_categoryRepo = categoryRepo;
-		_validator = validator;
-	}
+    public CreateCategoryHandler(ICategoryRepo categoryRepo, IValidator<CategoryCreateDto> validator)
+    {
+        _categoryRepo = categoryRepo;
+        _validator = validator;
+    }
 
-	public async ValueTask<IActionResult> Handle(CreateCategoryRequest request, CancellationToken cancellationToken)
-	{
-		var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-		if (!validationResult.IsValid)
-		{
-			return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-		}
+    public async ValueTask<IActionResult> Handle(CreateCategoryRequest request, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
+        }
 
-		var category = await _categoryRepo.CreateAsync(request.Dto.Adapt<Category>());
-		return new CreatedAtRouteResult("GetCategoryById", new { id = category.Id }, category.Adapt<CategoryDto>());
-	}
+        var category = await _categoryRepo.CreateAsync(request.Dto.Adapt<Category>());
+        return new CreatedAtRouteResult("GetCategoryById", new {id = category.Id}, category.Adapt<CategoryDto>());
+    }
 }

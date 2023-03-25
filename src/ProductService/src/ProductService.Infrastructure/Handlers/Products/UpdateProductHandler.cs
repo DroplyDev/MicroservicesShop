@@ -16,27 +16,27 @@ namespace ProductService.Infrastructure.Handlers.Products;
 
 public sealed record UpdateProductHandler : IActionRequestHandler<UpdateProductRequest>
 {
-	private readonly IProductRepo _productRepo;
-	private readonly IValidator<ProductUpdateDto> _validator;
+    private readonly IProductRepo _productRepo;
+    private readonly IValidator<ProductUpdateDto> _validator;
 
-	public UpdateProductHandler(IProductRepo productRepo, IValidator<ProductUpdateDto> validator)
-	{
-		_productRepo = productRepo;
-		_validator = validator;
-	}
+    public UpdateProductHandler(IProductRepo productRepo, IValidator<ProductUpdateDto> validator)
+    {
+        _productRepo = productRepo;
+        _validator = validator;
+    }
 
-	public async ValueTask<IActionResult> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
-	{
-		var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-		if (!validationResult.IsValid)
-		{
-			return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-		}
+    public async ValueTask<IActionResult> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
+        }
 
-		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == request.Id) ??
-					  throw new EntityNotFoundByIdException<Product>(request.Id);
-		request.Dto.Adapt(product);
-		await _productRepo.SaveChangesAsync();
-		return new NoContentResult();
-	}
+        var product = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == request.Id) ??
+                      throw new EntityNotFoundByIdException<Product>(request.Id);
+        request.Dto.Adapt(product);
+        await _productRepo.SaveChangesAsync();
+        return new NoContentResult();
+    }
 }

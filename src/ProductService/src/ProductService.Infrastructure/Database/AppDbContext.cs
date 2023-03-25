@@ -1,4 +1,5 @@
 ﻿#region
+
 using Microsoft.EntityFrameworkCore;
 using ProductService.Domain;
 using ProductService.Infrastructure.Database.Configurations;
@@ -22,9 +23,9 @@ public partial class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-            modelBuilder.ApplyConfiguration(new Configurations.CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.ProductConfiguration());
-            modelBuilder.ApplyConfiguration(new Configurations.ProductImageConfiguration());
+        modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
 
         OnModelCreatingGeneratedProcedures(modelBuilder);
         OnModelCreatingGeneratedFunctions(modelBuilder);

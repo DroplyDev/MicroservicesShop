@@ -17,19 +17,7 @@ public partial class AppDbContext
         modelBuilder.ApplyGlobalFilters("IsDeleted", false);
         modelBuilder.ApplyGlobalFilters<DateTime?>("DeleteDate", null);
     }
-#pragma warning disable IDE0060
-    [DbFunction("JSON_VALUE", IsBuiltIn = true, IsNullable = false)]
-    public static string JsonValue(string expression, string path)
-    {
-        throw new NotSupportedException();
-    }
 
-    [DbFunction("JSON_QUERY", IsBuiltIn = true, IsNullable = false)]
-    public static string JsonQuery(string expression, string path)
-    {
-        throw new NotSupportedException();
-    }
-#pragma warning restore IDE0060
     public override int SaveChanges()
     {
         UpdateDefaultActionStatuses();
@@ -84,4 +72,17 @@ public partial class AppDbContext
             }
         }
     }
+#pragma warning disable IDE0060
+    [DbFunction("JSON_VALUE", IsBuiltIn = true, IsNullable = false)]
+    public static string JsonValue(string expression, string path)
+    {
+        throw new NotSupportedException();
+    }
+
+    [DbFunction("JSON_QUERY", IsBuiltIn = true, IsNullable = false)]
+    public static string JsonQuery(string expression, string path)
+    {
+        throw new NotSupportedException();
+    }
+#pragma warning restore IDE0060
 }

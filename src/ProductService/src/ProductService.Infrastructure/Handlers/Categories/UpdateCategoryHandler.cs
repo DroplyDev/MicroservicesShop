@@ -16,27 +16,27 @@ namespace ProductService.Infrastructure.Handlers.Categories;
 
 public sealed record UpdateCategoryHandler : IActionRequestHandler<UpdateCategoryRequest>
 {
-	private readonly ICategoryRepo _categoryRepo;
-	private readonly IValidator<CategoryUpdateDto> _validator;
+    private readonly ICategoryRepo _categoryRepo;
+    private readonly IValidator<CategoryUpdateDto> _validator;
 
-	public UpdateCategoryHandler(ICategoryRepo categoryRepo, IValidator<CategoryUpdateDto> validator)
-	{
-		_categoryRepo = categoryRepo;
-		_validator = validator;
-	}
+    public UpdateCategoryHandler(ICategoryRepo categoryRepo, IValidator<CategoryUpdateDto> validator)
+    {
+        _categoryRepo = categoryRepo;
+        _validator = validator;
+    }
 
-	public async ValueTask<IActionResult> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
-	{
-		var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-		if (!validationResult.IsValid)
-		{
-			return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-		}
+    public async ValueTask<IActionResult> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
+    {
+        var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
+        }
 
-		var product = await _categoryRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == request.Id) ??
-					  throw new EntityNotFoundByIdException<Category>(request.Id);
-		request.Dto.Adapt(product);
-		await _categoryRepo.SaveChangesAsync();
-		return new NoContentResult();
-	}
+        var product = await _categoryRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == request.Id) ??
+                      throw new EntityNotFoundByIdException<Category>(request.Id);
+        request.Dto.Adapt(product);
+        await _categoryRepo.SaveChangesAsync();
+        return new NoContentResult();
+    }
 }

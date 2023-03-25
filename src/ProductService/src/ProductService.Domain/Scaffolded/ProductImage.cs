@@ -1,5 +1,4 @@
-﻿
-namespace ProductService.Domain;
+﻿namespace ProductService.Domain;
 
 public partial class ProductImage
 {

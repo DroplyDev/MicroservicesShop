@@ -2,13 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ProductService.Presentation;
+
 internal static partial class LoggerExtensions
 {
     [LoggerMessage(
@@ -36,7 +31,8 @@ internal static partial class LoggerExtensions
     [LoggerMessage(
         EventId = 5002,
         Level = LogLevel.Critical,
-        Message = "{Application} terminated unexpectedly in {Environment} mode with runtime {Runtime} and OS {OperatingSystem}.")]
+        Message =
+            "{Application} terminated unexpectedly in {Environment} mode with runtime {Runtime} and OS {OperatingSystem}.")]
     public static partial void ApplicationTerminatedUnexpectedly(
         this ILogger logger,
         Exception exception,

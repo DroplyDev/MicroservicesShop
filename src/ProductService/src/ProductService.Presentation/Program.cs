@@ -9,6 +9,7 @@ using ProductService.Presentation;
 using Serilog;
 
 #endregion
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add logging
@@ -56,6 +57,7 @@ else
 {
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -76,7 +78,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
 
 
 await app.RunAsync();

@@ -166,7 +166,7 @@ public static class DependencyInjection
                             : new Uri(swaggerSection["TermsOfServiceUrl"]!),
                         License = licenseSection is null
                             ? null
-                            : new OpenApiLicense { Name = licenseSection["Name"], Url = new Uri(licenseSection["Url"]!) }
+                            : new OpenApiLicense {Name = licenseSection["Name"], Url = new Uri(licenseSection["Url"]!)}
                     });
             }
 
@@ -180,15 +180,14 @@ public static class DependencyInjection
                 Description = "Put ONLY your JWT Bearer token in text box below!",
                 Reference = new OpenApiReference
                 {
-                    Id = JwtBearerDefaults.AuthenticationScheme,
-                    Type = ReferenceType.SecurityScheme
+                    Id = JwtBearerDefaults.AuthenticationScheme, Type = ReferenceType.SecurityScheme
                 }
             };
             options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement {{jwtSecurityScheme, Array.Empty<string>()}});
             var currentAssembly = Assembly.GetExecutingAssembly();
             var xmlDocs = currentAssembly.GetReferencedAssemblies()
-                .Union(new[] { currentAssembly.GetName() })
+                .Union(new[] {currentAssembly.GetName()})
                 .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location)!,
                     $"{a.Name}.xml"))
                 .Where(File.Exists).ToArray();
