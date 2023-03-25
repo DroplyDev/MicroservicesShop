@@ -17,7 +17,7 @@ public partial class AppDbContext
         modelBuilder.ApplyGlobalFilters("IsDeleted", false);
         modelBuilder.ApplyGlobalFilters<DateTime?>("DeleteDate", null);
     }
-
+#pragma warning disable IDE0060
     [DbFunction("JSON_VALUE", IsBuiltIn = true, IsNullable = false)]
     public static string JsonValue(string expression, string path)
     {
@@ -29,7 +29,7 @@ public partial class AppDbContext
     {
         throw new NotSupportedException();
     }
-
+#pragma warning restore IDE0060
     public override int SaveChanges()
     {
         UpdateDefaultActionStatuses();
@@ -42,10 +42,10 @@ public partial class AppDbContext
         return base.SaveChanges(acceptAllChangesOnSuccess);
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         UpdateDefaultActionStatuses();
-        return await base.SaveChangesAsync(cancellationToken);
+        return base.SaveChangesAsync(cancellationToken);
     }
 
     public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,

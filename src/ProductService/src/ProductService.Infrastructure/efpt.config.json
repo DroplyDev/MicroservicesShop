@@ -1,0 +1,49 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "AppDbContext",
+   "ContextNamespace": "Infrastructure.Database",
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": "Domain",
+   "OutputContextPath": "..\\ProductService.Infrastructure\\Database",
+   "OutputPath": "..\\ProductService.Domain\\Scaffolded",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "ProductService",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 3,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[Categories]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ProductImages]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Products]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "RUSTY.ProductMicroserviceDB",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": true,
+   "UseManyToManyEntity": true,
+   "UseNoDefaultConstructor": true,
+   "UseNoObjectFilter": true,
+   "UseNodaTime": false,
+   "UseNullableReferences": true,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": true
+}

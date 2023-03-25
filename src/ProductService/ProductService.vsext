@@ -1,0 +1,12 @@
+{
+  "id": "53c4fa17-28ee-4415-a0f1-d19cefacf5d8",
+  "name": "My Visual Studio extensions",
+  "description": "A collection of my Visual Studio extensions",
+  "version": "1.0",
+  "extensions": [
+    {
+      "name": "EF Core Power Tools",
+      "vsixId": "f4c4712c-ceae-4803-8e52-0e2049d5de9f"
+    }
+  ]
+}
