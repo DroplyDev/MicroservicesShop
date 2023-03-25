@@ -1,14 +1,14 @@
-#region
+﻿#region
 
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using ProductService.Infrastructure.Database;
 using ProductService.Infrastructure.Middlewares;
 using ProductService.Presentation;
 using Serilog;
 
 #endregion
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add logging
@@ -17,7 +17,7 @@ var configuration = builder.Configuration;
 var services = builder.Services;
 services.AddDatabases(configuration, builder.Environment);
 services.AddSwagger(configuration);
-services.AddApiVersioningSupport(configuration);
+services.AddApiVersioningSupport();
 services.AddAuth(configuration);
 services.AddConfigurations(configuration);
 services.AddLogging();
@@ -29,6 +29,9 @@ services.AddRepositories();
 services.AddServices();
 services.AddMapster();
 services.AddMediatorService();
+services.AddHttpContextAccessor();
+// Add useful interface for accessing the ActionContext outside a controller.
+services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 // Build app
 var app = builder.Build();
 // set Serilog request logging
@@ -49,7 +52,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
-
+else
+{
+    app.UseHsts();
+}
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -70,4 +76,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+
 await app.RunAsync();

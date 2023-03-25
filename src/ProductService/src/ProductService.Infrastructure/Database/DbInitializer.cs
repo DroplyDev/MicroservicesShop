@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -33,42 +33,5 @@ public static class DbInitializer
         using var scope = services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await context.Database.EnsureCreatedAsync();
-    }
-
-
-    private static string LoremIpsum(int minWords, int maxWords,
-        int minSentences, int maxSentences,
-        int numParagraphs)
-    {
-        var words = new[]
-        {
-            "lorem", "ipsum", "dolor", "sit", "amet", "consectetuer", "adipiscing", "elit", "sed", "diam",
-            "nonummy", "nibh", "euismod", "tincidunt", "ut", "laoreet", "dolore", "magna", "aliquam", "erat"
-        };
-
-        var rand = new Random();
-        var numSentences = rand.Next(maxSentences - minSentences)
-                           + minSentences + 1;
-        var numWords = rand.Next(maxWords - minWords) + minWords + 1;
-
-        var result = new StringBuilder();
-
-        for (var p = 0; p < numParagraphs; p++)
-        for (var s = 0; s < numSentences; s++)
-        {
-            for (var w = 0; w < numWords; w++)
-            {
-                if (w > 0)
-                {
-                    result.Append(" ");
-                }
-
-                result.Append(words[rand.Next(words.Length)]);
-            }
-
-            result.Append(". ");
-        }
-
-        return result.ToString();
     }
 }
