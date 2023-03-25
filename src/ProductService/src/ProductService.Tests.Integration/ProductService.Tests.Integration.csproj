@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestOrder\" />
     <Folder Include="TestImages\" />
   </ItemGroup>
   <ItemGroup>

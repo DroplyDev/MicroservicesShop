@@ -39,10 +39,14 @@ public sealed class ProductImagesController : BaseApiController
 		typeof(List<ProductImageDto>)
 	)]
 	[HttpGet("{productId:int}/images")]
-	public async Task<IActionResult> GetProductImages([SwaggerParameter("The product id")] int productId, CancellationToken cancellationToken)
+	public async Task<IActionResult> GetProductImages([SwaggerParameter("The product id")] int productId,
+		CancellationToken cancellationToken)
 	{
 		if (!await _productRepo.ExistsAsync(productId, cancellationToken))
+		{
 			throw new EntityNotFoundByIdException<Product>(productId);
+		}
+
 		var productImages = await _productImageRepo.Where(pi => pi.ProductId == productId)
 			.ProjectToType<ProductImageDto>().ToListAsync(cancellationToken);
 		return Ok(productImages);
@@ -65,10 +69,7 @@ public sealed class ProductImagesController : BaseApiController
 	{
 		var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
 					  throw new EntityNotFoundByIdException<Product>(productId);
-		product.ProductImages.Add(new ProductImage
-		{
-			Icon = await FileManagerService.FormFileToByteArrayAsync(image)
-		});
+		product.ProductImages.Add(new ProductImage { Icon = await FileManagerService.FormFileToByteArrayAsync(image) });
 		await _productRepo.SaveChangesAsync();
 		return NoContent();
 	}
@@ -91,7 +92,10 @@ public sealed class ProductImagesController : BaseApiController
 						  includes.Include(i => i.ProductImages.FirstOrDefault(pi => pi.Id == imageId))) ??
 					  throw new EntityNotFoundByIdException<Product>(productId);
 		if (product.ProductImages.Count == 0)
+		{
 			throw new EntityNotFoundByIdException<Product>(imageId);
+		}
+
 		product.ProductImages.Clear();
 		await _productRepo.SaveChangesAsync();
 		return NoContent();

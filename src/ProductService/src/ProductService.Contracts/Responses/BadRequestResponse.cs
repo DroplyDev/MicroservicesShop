@@ -1,10 +1,10 @@
-﻿#region
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+#region
+
 using FluentValidation.Results;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
 
 #endregion
 
@@ -13,16 +13,28 @@ namespace ProductService.Contracts.Responses;
 /// <summary>
 ///     BadRequestResponse
 /// </summary>
-public sealed class BadRequestResponse
+public sealed record BadRequestResponse
 {
-	public List<ValidationFailure> Errors { get; set; }
+    public BadRequestResponse(List<ValidationResponse> errors)
+    {
+        Errors = errors;
+    }
 
-	public BadRequestResponse()
-	{
-		Errors = new List<ValidationFailure>();
-	}
-	public BadRequestResponse(List<ValidationFailure> errors)
-	{
-		Errors = errors;
-	}
+    public BadRequestResponse(ValidationResult validationResult)
+    {
+        Errors = validationResult.Errors.Select(e => new ValidationResponse
+        {
+            PropertyName = e.PropertyName,
+            ErrorMessage = e.ErrorMessage,
+            AttemptedValue = e.AttemptedValue,
+            FormattedMessagePlaceholderValues = e.FormattedMessagePlaceholderValues
+        }).ToList();
+    }
+
+    public List<ValidationResponse> Errors { get; set; }
+
+    public static BadRequestResponse With(ValidationResult validationResult)
+    {
+        return new BadRequestResponse(validationResult);
+    }
 }

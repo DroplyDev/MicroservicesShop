@@ -4,7 +4,7 @@ namespace ProductService.Infrastructure.Mapping;
 
 public class ProductProfile : IRegister
 {
-	public void Register(TypeAdapterConfig config)
-	{
-	}
+    public void Register(TypeAdapterConfig config)
+    {
+    }
 }

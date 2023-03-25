@@ -1,11 +1,9 @@
-﻿using Mapster;
+﻿using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Categories;
 using ProductService.Contracts.Requests.Pagination;
 using ProductService.Contracts.Responses;
-using ProductService.Domain;
-using ProductService.Domain.Exceptions.Entity;
+using ProductService.Infrastructure.Requests.Categories;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ProductService.Presentation.Controllers.V1;
@@ -13,11 +11,11 @@ namespace ProductService.Presentation.Controllers.V1;
 [ApiVersion("1.0", Deprecated = false)]
 public class CategoriesController : BaseRoutedController
 {
-	private readonly ICategoryRepo _productRepo;
+	private readonly IMediator _mediator;
 
-	public CategoriesController(ICategoryRepo productRepo)
+	public CategoriesController(IMediator mediator)
 	{
-		_productRepo = productRepo ?? throw new ArgumentNullException(nameof(productRepo));
+		_mediator = mediator;
 	}
 
 	[SwaggerOperation(
@@ -33,7 +31,7 @@ public class CategoriesController : BaseRoutedController
 	public async Task<IActionResult> GetFilteredPagedCategoriesAsync(FilterOrderPageRequest request,
 		CancellationToken cancellationToken)
 	{
-		return Ok(await _productRepo.PaginateAsync<CategoryDto>(request, cancellationToken));
+		return await _mediator.Send(new GetPagedCategoriesRequest(request), cancellationToken);
 	}
 
 	[SwaggerOperation(
@@ -54,9 +52,7 @@ public class CategoriesController : BaseRoutedController
 	public async Task<IActionResult> GetCategoryByIdAsync([SwaggerParameter("The category id")] int id,
 		CancellationToken cancellationToken)
 	{
-		var category = await _productRepo.GetByIdAsync(id, cancellationToken) ??
-		               throw new EntityNotFoundByIdException<Category>(id);
-		return Ok(category.Adapt<CategoryDto>());
+		return await _mediator.Send(new GetCategoryByIdRequest(id), cancellationToken);
 	}
 
 	[SwaggerOperation(
@@ -77,9 +73,7 @@ public class CategoriesController : BaseRoutedController
 	public async Task<IActionResult> GetCategoryToUpdateByIdAsync([SwaggerParameter("The category id")] int id,
 		CancellationToken cancellationToken)
 	{
-		var category = await _productRepo.GetByIdAsync(id, cancellationToken) ??
-		               throw new EntityNotFoundByIdException<Category>(id);
-		return Ok(category.Adapt<CategoryUpdateDto>());
+		return await _mediator.Send(new GetCategoryToUpdateByIdRequest(id), cancellationToken);
 	}
 
 	[SwaggerOperation(
@@ -93,8 +87,7 @@ public class CategoriesController : BaseRoutedController
 	[HttpPost]
 	public async Task<IActionResult> CreateCategoryAsync(CategoryCreateDto dto)
 	{
-		var category = await _productRepo.CreateAsync(dto.Adapt<Category>());
-		return CreatedAtAction("GetCategoryById", new {id = category.Id}, category.Adapt<CategoryDto>());
+		return await _mediator.Send(new CreateCategoryRequest(dto));
 	}
 
 	[SwaggerOperation(
@@ -108,11 +101,7 @@ public class CategoriesController : BaseRoutedController
 	public async Task<IActionResult> UpdateCategoryAsync([SwaggerParameter("The category id")] int id,
 		CategoryUpdateDto dto)
 	{
-		var category = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == id) ??
-		               throw new EntityNotFoundByIdException<Category>(id);
-		dto.Adapt(category);
-		await _productRepo.SaveChangesAsync();
-		return NoContent();
+		return await _mediator.Send(new UpdateCategoryRequest(id, dto));
 	}
 
 	[SwaggerOperation(
@@ -130,7 +119,6 @@ public class CategoriesController : BaseRoutedController
 	[HttpDelete("{id:int}")]
 	public async Task<IActionResult> DeleteCategoryAsync([SwaggerParameter("The category id")] int id)
 	{
-		await _productRepo.DeleteAsync(id);
-		return NoContent();
+		return await _mediator.Send(new DeleteCategoryRequest(id));
 	}
 }

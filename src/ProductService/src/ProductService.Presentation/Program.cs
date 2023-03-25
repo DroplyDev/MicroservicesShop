@@ -23,38 +23,43 @@ services.AddConfigurations(configuration);
 services.AddLogging();
 services.AddFluentValidation();
 services.AddControllers(options => options.Conventions.Add(new KebabCaseControllerModelConvention()))
-	.AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 services.AddEndpointsApiExplorer();
 services.AddRepositories();
 services.AddServices();
 services.AddMapster();
-
+services.AddMediatorService();
 // Build app
 var app = builder.Build();
 // set Serilog request logging
 app.UseSerilogRequestLogging(configure =>
 {
-	configure.MessageTemplate =
-		"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000}ms";
+    configure.MessageTemplate =
+        "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000}ms";
 });
 //Prepare db
 if (app.Environment.IsStaging())
 {
-	await app.Services.CreateDatabaseFromContextIfNotExistsAsync();
-	await app.Services.InitializeDatabaseDataAsync();
+    await app.Services.CreateDatabaseFromContextIfNotExistsAsync();
+    await app.Services.InitializeDatabaseDataAsync();
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-	var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-	foreach (var groupName in provider.ApiVersionDescriptions.Select(item => item.GroupName))
-		options.SwaggerEndpoint($"../swagger/{groupName}/swagger.json",
-			groupName.ToUpperInvariant());
+    var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    foreach (var groupName in provider.ApiVersionDescriptions.Select(item => item.GroupName))
+    {
+        options.SwaggerEndpoint($"../swagger/{groupName}/swagger.json",
+            groupName.ToUpperInvariant());
+    }
 });
 app.UseRouting();
 app.UseCors("All");

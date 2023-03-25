@@ -1,11 +1,15 @@
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 using Serilog.Events;
 
 namespace ProductService.Domain.Exceptions.Entity;
 
 public abstract class BaseEntityException : ApiException
 {
-	protected BaseEntityException(string message, int statusCode, LogEventLevel logEventLevel) : base(message,
-		statusCode, logEventLevel)
-	{
-	}
+    protected BaseEntityException(string message, int statusCode, LogEventLevel logEventLevel) : base(message,
+        statusCode, logEventLevel)
+    {
+    }
 }
