@@ -15,1880 +15,1880 @@
 
 namespace ProductService.Tests.Integration
 {
-	using System = global::System;
-
-	[System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-	public partial class NSwagClient
-	{
-		private System.Net.Http.HttpClient _httpClient;
-		private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
-
-		public NSwagClient(System.Net.Http.HttpClient httpClient)
-		{
-			_httpClient = httpClient;
-			_settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
-		}
-
-		private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
-		{
-			var settings = new Newtonsoft.Json.JsonSerializerSettings();
-			UpdateJsonSerializerSettings(settings);
-			return settings;
-		}
-
-		protected Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
-
-		partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
-
-		partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
-		partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
-		partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Get paged Categories
-		/// </summary>
-		/// <remarks>
-		/// Returns paged list
-		/// </remarks>
-		/// <returns>Categories retrieved successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<CategoryDtoPagedResponse> GetFilteredPagedCategoriesAsync(FilterOrderPageRequest body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/categories/paged");
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
-					var content_ = new System.Net.Http.StringContent(json_);
-					content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-					request_.Content = content_;
-					request_.Method = new System.Net.Http.HttpMethod("POST");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 200)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<CategoryDtoPagedResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						if (status_ == 400)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Get Category by id
-		/// </summary>
-		/// <remarks>
-		/// Returns paged list
-		/// </remarks>
-		/// <param name="id">The category id</param>
-		/// <returns>Category retrieved successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<CategoryDto> GetCategoryByIdAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (id == null)
-				throw new System.ArgumentNullException("id");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/categories/{id}");
-			urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("GET");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 200)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<CategoryDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Category with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Update Category
-		/// </summary>
-		/// <remarks>
-		/// Updates existing Category
-		/// </remarks>
-		/// <param name="id">The category id</param>
-		/// <returns>Category updated successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task UpdateCategoryAsync(int id, CategoryUpdateDto body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (id == null)
-				throw new System.ArgumentNullException("id");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/categories/{id}");
-			urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
-					var content_ = new System.Net.Http.StringContent(json_);
-					content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-					request_.Content = content_;
-					request_.Method = new System.Net.Http.HttpMethod("PUT");
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 204)
-						{
-							return;
-						}
-						else
-						if (status_ == 400)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Delete Category
-		/// </summary>
-		/// <remarks>
-		/// Deletes existing Category
-		/// </remarks>
-		/// <param name="id">The category id</param>
-		/// <returns>Category deleted successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task DeleteCategoryAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (id == null)
-				throw new System.ArgumentNullException("id");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/categories/{id}");
-			urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("DELETE");
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 204)
-						{
-							return;
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Category with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Get Category to update by id
-		/// </summary>
-		/// <remarks>
-		/// Returns Category dto for update
-		/// </remarks>
-		/// <param name="id">The category id</param>
-		/// <returns>Category retrieved successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<CategoryUpdateDto> GetCategoryToUpdateByIdAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (id == null)
-				throw new System.ArgumentNullException("id");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/categories/update/{id}");
-			urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("GET");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 200)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<CategoryUpdateDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Category with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Create new Category
-		/// </summary>
-		/// <remarks>
-		/// Creates new Category
-		/// </remarks>
-		/// <returns>Category created successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<CategoryDto> CreateCategoryAsync(CategoryCreateDto body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/categories");
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
-					var content_ = new System.Net.Http.StringContent(json_);
-					content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-					request_.Content = content_;
-					request_.Method = new System.Net.Http.HttpMethod("POST");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 201)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<CategoryDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						if (status_ == 400)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Add thumbnail
-		/// </summary>
-		/// <remarks>
-		/// Adds thumbnail for an existing product
-		/// </remarks>
-		/// <param name="productId">The product id</param>
-		/// <returns>Images retrieved successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductImageDto>> GetProductImagesAsync(int productId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (productId == null)
-				throw new System.ArgumentNullException("productId");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/{productId}/images");
-			urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("GET");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 200)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ProductImageDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Add image for product
-		/// </summary>
-		/// <remarks>
-		/// Adds image for an existing product
-		/// </remarks>
-		/// <param name="productId">The product id</param>
-		/// <returns>Image created successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task CreateImageForProductAsync(int productId, FileParameter image = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (productId == null)
-				throw new System.ArgumentNullException("productId");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/{productId}/images");
-			urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					var boundary_ = System.Guid.NewGuid().ToString();
-					var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
-					content_.Headers.Remove("Content-Type");
-					content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
-
-					if (image == null)
-						throw new System.ArgumentNullException("image");
-					else
-					{
-						var content_image_ = new System.Net.Http.StreamContent(image.Data);
-						if (!string.IsNullOrEmpty(image.ContentType))
-							content_image_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(image.ContentType);
-						content_.Add(content_image_, "image", image.FileName ?? "image");
-					}
-					request_.Content = content_;
-					request_.Method = new System.Net.Http.HttpMethod("POST");
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 204)
-						{
-							return;
-						}
-						else
-						if (status_ == 400)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Delete image
-		/// </summary>
-		/// <remarks>
-		/// Deletes image for a specific product
-		/// </remarks>
-		/// <param name="productId">The product id</param>
-		/// <param name="imageId">The image id</param>
-		/// <returns>Image deleted successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task DeleteImageForProductAsync(int productId, int imageId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (productId == null)
-				throw new System.ArgumentNullException("productId");
-
-			if (imageId == null)
-				throw new System.ArgumentNullException("imageId");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/{productId}/images/{imageId}");
-			urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
-			urlBuilder_.Replace("{imageId}", System.Uri.EscapeDataString(ConvertToString(imageId, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("DELETE");
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Image or product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 204)
-						{
-							return;
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Add thumbnail
-		/// </summary>
-		/// <remarks>
-		/// Adds thumbnail for an existing product
-		/// </remarks>
-		/// <param name="productId">The product id</param>
-		/// <returns>Thumbnail updated successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task CreateThumbnailForProductAsync(int productId, FileParameter image = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (productId == null)
-				throw new System.ArgumentNullException("productId");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/{productId}/thumbnails");
-			urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					var boundary_ = System.Guid.NewGuid().ToString();
-					var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
-					content_.Headers.Remove("Content-Type");
-					content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
-
-					if (image == null)
-						throw new System.ArgumentNullException("image");
-					else
-					{
-						var content_image_ = new System.Net.Http.StreamContent(image.Data);
-						if (!string.IsNullOrEmpty(image.ContentType))
-							content_image_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(image.ContentType);
-						content_.Add(content_image_, "image", image.FileName ?? "image");
-					}
-					request_.Content = content_;
-					request_.Method = new System.Net.Http.HttpMethod("POST");
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 204)
-						{
-							return;
-						}
-						else
-						if (status_ == 400)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Delete thumbnail
-		/// </summary>
-		/// <remarks>
-		/// Deletes thumbnail for a specific product
-		/// </remarks>
-		/// <param name="productId">The product id</param>
-		/// <returns>Thumbnail deleted successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task DeleteThumbnailForProductAsync(int productId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (productId == null)
-				throw new System.ArgumentNullException("productId");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/{productId}/thumbnails");
-			urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("DELETE");
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 204)
-						{
-							return;
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Get paged Products
-		/// </summary>
-		/// <remarks>
-		/// Returns paged list
-		/// </remarks>
-		/// <returns>Products retrieved successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<ProductDtoPagedResponse> GetFilteredPagedProductsAsync(FilterOrderPageRequest body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/paged");
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
-					var content_ = new System.Net.Http.StringContent(json_);
-					content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-					request_.Content = content_;
-					request_.Method = new System.Net.Http.HttpMethod("POST");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 200)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ProductDtoPagedResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						if (status_ == 400)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Get Product by id
-		/// </summary>
-		/// <remarks>
-		/// Returns paged list
-		/// </remarks>
-		/// <param name="id">The product id</param>
-		/// <returns>Product retrieved successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<ProductDto> GetProductByIdAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (id == null)
-				throw new System.ArgumentNullException("id");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/{id}");
-			urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("GET");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 200)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ProductDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Update Product
-		/// </summary>
-		/// <remarks>
-		/// Updates existing Product
-		/// </remarks>
-		/// <param name="id">The product id</param>
-		/// <returns>Product updated successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task UpdateProductAsync(int id, ProductUpdateDto body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (id == null)
-				throw new System.ArgumentNullException("id");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/{id}");
-			urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
-					var content_ = new System.Net.Http.StringContent(json_);
-					content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-					request_.Content = content_;
-					request_.Method = new System.Net.Http.HttpMethod("PUT");
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 204)
-						{
-							return;
-						}
-						else
-						if (status_ == 400)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Delete Product
-		/// </summary>
-		/// <remarks>
-		/// Deletes existing Product
-		/// </remarks>
-		/// <param name="id">The product id</param>
-		/// <returns>Product deleted successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task DeleteProductAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (id == null)
-				throw new System.ArgumentNullException("id");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/{id}");
-			urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("DELETE");
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 204)
-						{
-							return;
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Get Product to update by id
-		/// </summary>
-		/// <remarks>
-		/// Returns Product dto for update
-		/// </remarks>
-		/// <param name="id">The product id</param>
-		/// <returns>Product retrieved successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<ProductUpdateDto> GetProductToUpdateByIdAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			if (id == null)
-				throw new System.ArgumentNullException("id");
-
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products/update/{id}");
-			urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					request_.Method = new System.Net.Http.HttpMethod("GET");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 200)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ProductUpdateDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						if (status_ == 404)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		/// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-		/// <summary>
-		/// Create new Product
-		/// </summary>
-		/// <remarks>
-		/// Creates new Product
-		/// </remarks>
-		/// <returns>Product created successfully</returns>
-		/// <exception cref="SwaggerException">A server side error occurred.</exception>
-		public virtual async System.Threading.Tasks.Task<ProductDto> CreateProductAsync(ProductCreateDto body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
-		{
-			var urlBuilder_ = new System.Text.StringBuilder();
-			urlBuilder_.Append("api/v1/products");
-
-			var client_ = _httpClient;
-			var disposeClient_ = false;
-			try
-			{
-				using (var request_ = new System.Net.Http.HttpRequestMessage())
-				{
-					var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
-					var content_ = new System.Net.Http.StringContent(json_);
-					content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-					request_.Content = content_;
-					request_.Method = new System.Net.Http.HttpMethod("POST");
-					request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-					PrepareRequest(client_, request_, urlBuilder_);
-
-					var url_ = urlBuilder_.ToString();
-					request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-					PrepareRequest(client_, request_, url_);
-
-					var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-					var disposeResponse_ = true;
-					try
-					{
-						var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-						if (response_.Content != null && response_.Content.Headers != null)
-						{
-							foreach (var item_ in response_.Content.Headers)
-								headers_[item_.Key] = item_.Value;
-						}
-
-						ProcessResponse(client_, response_);
-
-						var status_ = (int)response_.StatusCode;
-						if (status_ == 500)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						if (status_ == 201)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<ProductDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							return objectResponse_.Object;
-						}
-						else
-						if (status_ == 400)
-						{
-							var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-							if (objectResponse_.Object == null)
-							{
-								throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-							}
-							throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
-						}
-						else
-						{
-							var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-							throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-						}
-					}
-					finally
-					{
-						if (disposeResponse_)
-							response_.Dispose();
-					}
-				}
-			}
-			finally
-			{
-				if (disposeClient_)
-					client_.Dispose();
-			}
-		}
-
-		protected struct ObjectResponseResult<T>
-		{
-			public ObjectResponseResult(T responseObject, string responseText)
-			{
-				this.Object = responseObject;
-				this.Text = responseText;
-			}
-
-			public T Object { get; }
-
-			public string Text { get; }
-		}
-
-		public bool ReadResponseAsString { get; set; }
-
-		protected virtual async System.Threading.Tasks.Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(System.Net.Http.HttpResponseMessage response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Threading.CancellationToken cancellationToken)
-		{
-			if (response == null || response.Content == null)
-			{
-				return new ObjectResponseResult<T>(default(T), string.Empty);
-			}
-
-			if (ReadResponseAsString)
-			{
-				var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-				try
-				{
-					var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-					return new ObjectResponseResult<T>(typedBody, responseText);
-				}
-				catch (Newtonsoft.Json.JsonException exception)
-				{
-					var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
-					throw new SwaggerException(message, (int)response.StatusCode, responseText, headers, exception);
-				}
-			}
-			else
-			{
-				try
-				{
-					using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-					using (var streamReader = new System.IO.StreamReader(responseStream))
-					using (var jsonTextReader = new Newtonsoft.Json.JsonTextReader(streamReader))
-					{
-						var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
-						var typedBody = serializer.Deserialize<T>(jsonTextReader);
-						return new ObjectResponseResult<T>(typedBody, string.Empty);
-					}
-				}
-				catch (Newtonsoft.Json.JsonException exception)
-				{
-					var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
-					throw new SwaggerException(message, (int)response.StatusCode, string.Empty, headers, exception);
-				}
-			}
-		}
-
-		private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
-		{
-			if (value == null)
-			{
-				return "";
-			}
-
-			if (value is System.Enum)
-			{
-				var name = System.Enum.GetName(value.GetType(), value);
-				if (name != null)
-				{
-					var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
-					if (field != null)
-					{
-						var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute))
-							as System.Runtime.Serialization.EnumMemberAttribute;
-						if (attribute != null)
-						{
-							return attribute.Value != null ? attribute.Value : name;
-						}
-					}
-
-					var converted = System.Convert.ToString(System.Convert.ChangeType(value, System.Enum.GetUnderlyingType(value.GetType()), cultureInfo));
-					return converted == null ? string.Empty : converted;
-				}
-			}
-			else if (value is bool)
-			{
-				return System.Convert.ToString((bool)value, cultureInfo).ToLowerInvariant();
-			}
-			else if (value is byte[])
-			{
-				return System.Convert.ToBase64String((byte[])value);
-			}
-			else if (value.GetType().IsArray)
-			{
-				var array = System.Linq.Enumerable.OfType<object>((System.Array)value);
-				return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
-			}
-
-			var result = System.Convert.ToString(value, cultureInfo);
-			return result == null ? "" : result;
-		}
-	}
-
-
-
-	[System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-	public partial class FileParameter
-	{
-		public FileParameter(System.IO.Stream data)
-			: this(data, null, null)
-		{
-		}
-
-		public FileParameter(System.IO.Stream data, string fileName)
-			: this(data, fileName, null)
-		{
-		}
-
-		public FileParameter(System.IO.Stream data, string fileName, string contentType)
-		{
-			Data = data;
-			FileName = fileName;
-			ContentType = contentType;
-		}
-
-		public System.IO.Stream Data { get; private set; }
-
-		public string FileName { get; private set; }
-
-		public string ContentType { get; private set; }
-	}
-
-
-
-	[System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-	public partial class SwaggerException : System.Exception
-	{
-		public int StatusCode { get; private set; }
-
-		public string Response { get; private set; }
-
-		public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
-
-		public SwaggerException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
-			: base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
-		{
-			StatusCode = statusCode;
-			Response = response;
-			Headers = headers;
-		}
-
-		public override string ToString()
-		{
-			return string.Format("HTTP Response: \n\n{0}\n\n{1}", Response, base.ToString());
-		}
-	}
-
-	[System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-	public partial class SwaggerException<TResult> : SwaggerException
-	{
-		public TResult Result { get; private set; }
-
-		public SwaggerException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
-			: base(message, statusCode, response, headers, innerException)
-		{
-			Result = result;
-		}
-	}
+    using System = global::System;
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class NSwagClient
+    {
+        private System.Net.Http.HttpClient _httpClient;
+        private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
+
+        public NSwagClient(System.Net.Http.HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+            _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
+        }
+
+        private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
+        {
+            var settings = new Newtonsoft.Json.JsonSerializerSettings();
+            UpdateJsonSerializerSettings(settings);
+            return settings;
+        }
+
+        protected Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
+
+        partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
+
+        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
+        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
+        partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get paged Categories
+        /// </summary>
+        /// <remarks>
+        /// Returns paged list
+        /// </remarks>
+        /// <returns>Categories retrieved successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<CategoryDtoPagedResponse> GetFilteredPagedCategoriesAsync(FilterOrderPageRequest body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/categories/paged");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CategoryDtoPagedResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get Category by id
+        /// </summary>
+        /// <remarks>
+        /// Returns paged list
+        /// </remarks>
+        /// <param name="id">The category id</param>
+        /// <returns>Category retrieved successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<CategoryDto> GetCategoryByIdAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/categories/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CategoryDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Category with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update Category
+        /// </summary>
+        /// <remarks>
+        /// Updates existing Category
+        /// </remarks>
+        /// <param name="id">The category id</param>
+        /// <returns>Category updated successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task UpdateCategoryAsync(int id, CategoryUpdateDto body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/categories/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete Category
+        /// </summary>
+        /// <remarks>
+        /// Deletes existing Category
+        /// </remarks>
+        /// <param name="id">The category id</param>
+        /// <returns>Category deleted successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task DeleteCategoryAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/categories/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Category with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get Category to update by id
+        /// </summary>
+        /// <remarks>
+        /// Returns Category dto for update
+        /// </remarks>
+        /// <param name="id">The category id</param>
+        /// <returns>Category retrieved successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<CategoryUpdateDto> GetCategoryToUpdateByIdAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/categories/update/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CategoryUpdateDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Category with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Create new Category
+        /// </summary>
+        /// <remarks>
+        /// Creates new Category
+        /// </remarks>
+        /// <returns>Category created successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<CategoryDto> CreateCategoryAsync(CategoryCreateDto body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/categories");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<CategoryDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add thumbnail
+        /// </summary>
+        /// <remarks>
+        /// Adds thumbnail for an existing product
+        /// </remarks>
+        /// <param name="productId">The product id</param>
+        /// <returns>Images retrieved successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductImageDto>> GetProductImagesAsync(int productId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (productId == null)
+                throw new System.ArgumentNullException("productId");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/{productId}/images");
+            urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ProductImageDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add image for product
+        /// </summary>
+        /// <remarks>
+        /// Adds image for an existing product
+        /// </remarks>
+        /// <param name="productId">The product id</param>
+        /// <returns>Image created successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task CreateImageForProductAsync(int productId, FileParameter image = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (productId == null)
+                throw new System.ArgumentNullException("productId");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/{productId}/images");
+            urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var boundary_ = System.Guid.NewGuid().ToString();
+                    var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
+                    content_.Headers.Remove("Content-Type");
+                    content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
+
+                    if (image == null)
+                        throw new System.ArgumentNullException("image");
+                    else
+                    {
+                        var content_image_ = new System.Net.Http.StreamContent(image.Data);
+                        if (!string.IsNullOrEmpty(image.ContentType))
+                            content_image_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(image.ContentType);
+                        content_.Add(content_image_, "image", image.FileName ?? "image");
+                    }
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete image
+        /// </summary>
+        /// <remarks>
+        /// Deletes image for a specific product
+        /// </remarks>
+        /// <param name="productId">The product id</param>
+        /// <param name="imageId">The image id</param>
+        /// <returns>Image deleted successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task DeleteImageForProductAsync(int productId, int imageId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (productId == null)
+                throw new System.ArgumentNullException("productId");
+
+            if (imageId == null)
+                throw new System.ArgumentNullException("imageId");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/{productId}/images/{imageId}");
+            urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{imageId}", System.Uri.EscapeDataString(ConvertToString(imageId, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Image or product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add thumbnail
+        /// </summary>
+        /// <remarks>
+        /// Adds thumbnail for an existing product
+        /// </remarks>
+        /// <param name="productId">The product id</param>
+        /// <returns>Thumbnail updated successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task CreateThumbnailForProductAsync(int productId, FileParameter image = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (productId == null)
+                throw new System.ArgumentNullException("productId");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/{productId}/thumbnails");
+            urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var boundary_ = System.Guid.NewGuid().ToString();
+                    var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
+                    content_.Headers.Remove("Content-Type");
+                    content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
+
+                    if (image == null)
+                        throw new System.ArgumentNullException("image");
+                    else
+                    {
+                        var content_image_ = new System.Net.Http.StreamContent(image.Data);
+                        if (!string.IsNullOrEmpty(image.ContentType))
+                            content_image_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(image.ContentType);
+                        content_.Add(content_image_, "image", image.FileName ?? "image");
+                    }
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete thumbnail
+        /// </summary>
+        /// <remarks>
+        /// Deletes thumbnail for a specific product
+        /// </remarks>
+        /// <param name="productId">The product id</param>
+        /// <returns>Thumbnail deleted successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task DeleteThumbnailForProductAsync(int productId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (productId == null)
+                throw new System.ArgumentNullException("productId");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/{productId}/thumbnails");
+            urlBuilder_.Replace("{productId}", System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get paged Products
+        /// </summary>
+        /// <remarks>
+        /// Returns paged list
+        /// </remarks>
+        /// <returns>Products retrieved successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ProductDtoPagedResponse> GetFilteredPagedProductsAsync(FilterOrderPageRequest body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/paged");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDtoPagedResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get Product by id
+        /// </summary>
+        /// <remarks>
+        /// Returns paged list
+        /// </remarks>
+        /// <param name="id">The product id</param>
+        /// <returns>Product retrieved successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ProductDto> GetProductByIdAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update Product
+        /// </summary>
+        /// <remarks>
+        /// Updates existing Product
+        /// </remarks>
+        /// <param name="id">The product id</param>
+        /// <returns>Product updated successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task UpdateProductAsync(int id, ProductUpdateDto body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete Product
+        /// </summary>
+        /// <remarks>
+        /// Deletes existing Product
+        /// </remarks>
+        /// <param name="id">The product id</param>
+        /// <returns>Product deleted successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task DeleteProductAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 204)
+                        {
+                            return;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get Product to update by id
+        /// </summary>
+        /// <remarks>
+        /// Returns Product dto for update
+        /// </remarks>
+        /// <param name="id">The product id</param>
+        /// <returns>Product retrieved successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ProductUpdateDto> GetProductToUpdateByIdAsync(int id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products/update/{id}");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductUpdateDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Product with id was not found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Create new Product
+        /// </summary>
+        /// <remarks>
+        /// Creates new Product
+        /// </remarks>
+        /// <returns>Product created successfully</returns>
+        /// <exception cref="SwaggerException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ProductDto> CreateProductAsync(ProductCreateDto body = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append("api/v1/products");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 500)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ApiExceptionResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<ApiExceptionResponse>("Internal server error", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 201)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<BadRequestResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new SwaggerException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new SwaggerException<BadRequestResponse>("Model validation exception", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new SwaggerException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        protected struct ObjectResponseResult<T>
+        {
+            public ObjectResponseResult(T responseObject, string responseText)
+            {
+                this.Object = responseObject;
+                this.Text = responseText;
+            }
+
+            public T Object { get; }
+
+            public string Text { get; }
+        }
+
+        public bool ReadResponseAsString { get; set; }
+
+        protected virtual async System.Threading.Tasks.Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(System.Net.Http.HttpResponseMessage response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Threading.CancellationToken cancellationToken)
+        {
+            if (response == null || response.Content == null)
+            {
+                return new ObjectResponseResult<T>(default(T), string.Empty);
+            }
+
+            if (ReadResponseAsString)
+            {
+                var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
+                    return new ObjectResponseResult<T>(typedBody, responseText);
+                }
+                catch (Newtonsoft.Json.JsonException exception)
+                {
+                    var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
+                    throw new SwaggerException(message, (int)response.StatusCode, responseText, headers, exception);
+                }
+            }
+            else
+            {
+                try
+                {
+                    using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                    using (var streamReader = new System.IO.StreamReader(responseStream))
+                    using (var jsonTextReader = new Newtonsoft.Json.JsonTextReader(streamReader))
+                    {
+                        var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
+                        var typedBody = serializer.Deserialize<T>(jsonTextReader);
+                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                    }
+                }
+                catch (Newtonsoft.Json.JsonException exception)
+                {
+                    var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
+                    throw new SwaggerException(message, (int)response.StatusCode, string.Empty, headers, exception);
+                }
+            }
+        }
+
+        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+
+            if (value is System.Enum)
+            {
+                var name = System.Enum.GetName(value.GetType(), value);
+                if (name != null)
+                {
+                    var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
+                    if (field != null)
+                    {
+                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute))
+                            as System.Runtime.Serialization.EnumMemberAttribute;
+                        if (attribute != null)
+                        {
+                            return attribute.Value != null ? attribute.Value : name;
+                        }
+                    }
+
+                    var converted = System.Convert.ToString(System.Convert.ChangeType(value, System.Enum.GetUnderlyingType(value.GetType()), cultureInfo));
+                    return converted == null ? string.Empty : converted;
+                }
+            }
+            else if (value is bool)
+            {
+                return System.Convert.ToString((bool)value, cultureInfo).ToLowerInvariant();
+            }
+            else if (value is byte[])
+            {
+                return System.Convert.ToBase64String((byte[])value);
+            }
+            else if (value.GetType().IsArray)
+            {
+                var array = System.Linq.Enumerable.OfType<object>((System.Array)value);
+                return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
+            }
+
+            var result = System.Convert.ToString(value, cultureInfo);
+            return result == null ? "" : result;
+        }
+    }
+
+
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class FileParameter
+    {
+        public FileParameter(System.IO.Stream data)
+            : this(data, null, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string fileName)
+            : this(data, fileName, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string fileName, string contentType)
+        {
+            Data = data;
+            FileName = fileName;
+            ContentType = contentType;
+        }
+
+        public System.IO.Stream Data { get; private set; }
+
+        public string FileName { get; private set; }
+
+        public string ContentType { get; private set; }
+    }
+
+
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SwaggerException : System.Exception
+    {
+        public int StatusCode { get; private set; }
+
+        public string Response { get; private set; }
+
+        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
+
+        public SwaggerException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
+            : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
+        {
+            StatusCode = statusCode;
+            Response = response;
+            Headers = headers;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("HTTP Response: \n\n{0}\n\n{1}", Response, base.ToString());
+        }
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SwaggerException<TResult> : SwaggerException
+    {
+        public TResult Result { get; private set; }
+
+        public SwaggerException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
+            : base(message, statusCode, response, headers, innerException)
+        {
+            Result = result;
+        }
+    }
 
 }
 

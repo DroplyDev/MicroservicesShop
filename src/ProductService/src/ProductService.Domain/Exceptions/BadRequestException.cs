@@ -4,6 +4,7 @@
 
 namespace ProductService.Domain.Exceptions;
 
-public class BadRequestException : ApiException
+public sealed class BadRequestException : ApiException
 {
+
 }

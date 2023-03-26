@@ -2,4 +2,4 @@
 
 namespace ProductService.Infrastructure.Requests.Products;
 
-public sealed record GetPagedProductsRequest(FilterOrderPageRequest Request) : IActionRequest;
+public sealed record GetPagedProductsRequest(FilterOrderPageRequest Params) : IActionRequest;

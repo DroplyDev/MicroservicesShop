@@ -24,7 +24,7 @@ public sealed class ProductPaginationTest : BaseProductTest
         {
             FilterData = null,
             PageData = null,
-            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
+            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
         var response = await Client.GetFilteredPagedProductsAsync(request);
@@ -50,7 +50,7 @@ public sealed class ProductPaginationTest : BaseProductTest
         {
             FilterData = null,
             PageData = null,
-            OrderByData = new OrderByData {OrderBy = "", OrderDirection = OrderDirection.Desc}
+            OrderByData = new OrderByData { OrderBy = "", OrderDirection = OrderDirection.Desc }
         };
         //Act
         var response = () => Client.GetFilteredPagedProductsAsync(request);
@@ -76,8 +76,8 @@ public sealed class ProductPaginationTest : BaseProductTest
         var request = new FilterOrderPageRequest
         {
             FilterData = null,
-            PageData = new PageData {Offset = 1, Limit = 2},
-            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
+            PageData = new PageData { Offset = 1, Limit = 2 },
+            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
 
@@ -102,8 +102,8 @@ public sealed class ProductPaginationTest : BaseProductTest
         var request = new FilterOrderPageRequest
         {
             FilterData = null,
-            PageData = new PageData {Offset = -1, Limit = -1},
-            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
+            PageData = new PageData { Offset = -1, Limit = -1 },
+            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
         var response = () => Client.GetFilteredPagedProductsAsync(request);
@@ -128,8 +128,8 @@ public sealed class ProductPaginationTest : BaseProductTest
 
         var request = new FilterOrderPageRequest
         {
-            FilterData = new FilterData {DateFrom = DateTime.MinValue, DateTo = DateTime.Now},
-            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
+            FilterData = new FilterData { DateFrom = DateTime.MinValue, DateTo = DateTime.Now },
+            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
 
@@ -152,8 +152,8 @@ public sealed class ProductPaginationTest : BaseProductTest
         context.InitProducts();
         var request = new FilterOrderPageRequest
         {
-            FilterData = new FilterData {DateFrom = DateTime.Now.AddDays(1), DateTo = DateTime.Now.AddDays(-1)},
-            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
+            FilterData = new FilterData { DateFrom = DateTime.Now.AddDays(1), DateTo = DateTime.Now.AddDays(-1) },
+            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
         var response = () => Client.GetFilteredPagedProductsAsync(request);

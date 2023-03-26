@@ -25,7 +25,7 @@ public sealed class ProductGetByIdTest : BaseProductTest
         //Arrange
         await using var context = ApiFactory.GetContext();
 
-        context.InitProducts().First();
+        context.InitProducts();
         var request = -1;
         //Act
         var response = () => Client.GetProductByIdAsync(request);

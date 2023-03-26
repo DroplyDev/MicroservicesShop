@@ -27,11 +27,7 @@ public sealed record UpdateProductHandler : IActionRequestHandler<UpdateProductR
 
     public async ValueTask<IActionResult> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-        }
+        await _validator.ValidateAndThrowAsync(request.Dto, cancellationToken);
 
         var product = await _productRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == request.Id) ??
                       throw new EntityNotFoundByIdException<Product>(request.Id);

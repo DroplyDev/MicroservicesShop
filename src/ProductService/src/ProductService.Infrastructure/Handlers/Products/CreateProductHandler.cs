@@ -3,8 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Products;
 using ProductService.Contracts.Responses;
@@ -16,21 +18,19 @@ namespace ProductService.Infrastructure.Handlers.Products;
 public sealed record CreateProductHandler : IActionRequestHandler<CreateProductRequest>
 {
     private readonly IProductRepo _productRepo;
+    private readonly IActionContextAccessor _actionContextAccessor;
     private readonly IValidator<ProductCreateDto> _validator;
 
-    public CreateProductHandler(IProductRepo productRepo, IValidator<ProductCreateDto> validator)
+    public CreateProductHandler(IProductRepo productRepo, IActionContextAccessor actionContextAccessor, IValidator<ProductCreateDto> validator)
     {
         _productRepo = productRepo;
+        _actionContextAccessor = actionContextAccessor;
         _validator = validator;
     }
 
     public async ValueTask<IActionResult> Handle(CreateProductRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-        }
+        await _validator.ValidateAndThrowAsync(request.Dto, cancellationToken);
 
         var product = await _productRepo.CreateAsync(request.Dto.Adapt<Product>());
         return new CreatedAtActionResult("GetProductById", "Products", new { id = product.Id }, product.Adapt<ProductDto>());

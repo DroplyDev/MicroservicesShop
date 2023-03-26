@@ -27,11 +27,7 @@ public sealed record UpdateCategoryHandler : IActionRequestHandler<UpdateCategor
 
     public async ValueTask<IActionResult> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-        }
+        await _validator.ValidateAndThrowAsync(request.Dto, cancellationToken);
 
         var product = await _categoryRepo.FirstOrDefaultAsTrackingAsync(u => u.Id == request.Id) ??
                       throw new EntityNotFoundByIdException<Category>(request.Id);

@@ -1,8 +1,11 @@
-#region
+﻿#region
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ProductService.Contracts.Responses;
 using ProductService.Domain.Exceptions;
 using Serilog;
@@ -30,6 +33,14 @@ public sealed class ExceptionHandlingMiddleware
         try
         {
             await _next(context);
+        }
+        catch (ValidationException ex)
+        {
+
+            _logger.Warning(ex, ex.Message);
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.ContentType = ContentType;
+            await context.Response.WriteAsJsonAsync(new BadRequestResponse(ex.Errors));
         }
         catch (ApiException ex)
         {

@@ -25,12 +25,9 @@ public sealed record GetPagedProductsHandler : IActionRequestHandler<GetPagedPro
 
     public async ValueTask<IActionResult> Handle(GetPagedProductsRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.Request, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-        }
+        await _validator.ValidateAndThrowAsync(request.Params, cancellationToken);
 
-        return new OkObjectResult(await _productRepo.PaginateAsync<ProductDto>(request.Request, cancellationToken));
+
+        return new OkObjectResult(await _productRepo.PaginateAsync<ProductDto>(request.Params, cancellationToken));
     }
 }

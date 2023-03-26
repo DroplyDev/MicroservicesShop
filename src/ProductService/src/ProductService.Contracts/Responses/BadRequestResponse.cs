@@ -13,16 +13,28 @@ namespace ProductService.Contracts.Responses;
 /// <summary>
 ///     BadRequestResponse
 /// </summary>
-public sealed record BadRequestResponse
+public sealed class BadRequestResponse
 {
     public BadRequestResponse(List<ValidationResponse> errors)
     {
         Errors = errors;
     }
-
+    public BadRequestResponse(IEnumerable<ValidationFailure> validationFailures)
+    {
+        ParseFailures(validationFailures);
+    }
     public BadRequestResponse(ValidationResult validationResult)
     {
-        Errors = validationResult.Errors.Select(e => new ValidationResponse
+        ParseFailures(validationResult.Errors);
+    }
+
+    public BadRequestResponse()
+    {
+        Errors = new List<ValidationResponse>();
+    }
+    private void ParseFailures(IEnumerable<ValidationFailure> validationFailures)
+    {
+        Errors = validationFailures.Select(e => new ValidationResponse
         {
             PropertyName = e.PropertyName,
             ErrorMessage = e.ErrorMessage,
@@ -30,11 +42,5 @@ public sealed record BadRequestResponse
             FormattedMessagePlaceholderValues = e.FormattedMessagePlaceholderValues
         }).ToList();
     }
-
-    public List<ValidationResponse> Errors { get; set; }
-
-    public static BadRequestResponse With(ValidationResult validationResult)
-    {
-        return new BadRequestResponse(validationResult);
-    }
+    public List<ValidationResponse> Errors { get; set; } = null!;
 }

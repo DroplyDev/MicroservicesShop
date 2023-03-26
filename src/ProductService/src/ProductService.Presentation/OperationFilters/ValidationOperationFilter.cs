@@ -1,5 +1,6 @@
 ﻿#region
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using ProductService.Contracts.Responses;
 using Swashbuckle.AspNetCore.SwaggerGen;

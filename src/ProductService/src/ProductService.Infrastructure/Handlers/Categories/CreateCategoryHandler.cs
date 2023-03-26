@@ -26,11 +26,8 @@ public sealed record CreateCategoryHandler : IActionRequestHandler<CreateCategor
 
     public async ValueTask<IActionResult> Handle(CreateCategoryRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.Dto, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-        }
+        await _validator.ValidateAndThrowAsync(request.Dto, cancellationToken);
+
 
         var category = await _categoryRepo.CreateAsync(request.Dto.Adapt<Category>());
         return new CreatedAtActionResult("GetCategoryById", "Categories", new { id = category.Id }, category.Adapt<CategoryDto>());

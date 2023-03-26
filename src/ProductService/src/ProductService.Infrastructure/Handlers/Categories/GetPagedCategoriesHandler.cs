@@ -25,11 +25,7 @@ public sealed record GetPagedCategoriesHandler : IActionRequestHandler<GetPagedC
 
     public async ValueTask<IActionResult> Handle(GetPagedCategoriesRequest request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request.Params, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            return new BadRequestObjectResult(BadRequestResponse.With(validationResult));
-        }
+        await _validator.ValidateAndThrowAsync(request.Params, cancellationToken);
 
         return new OkObjectResult(await _categoryRepo.PaginateAsync<ProductDto>(request.Params, cancellationToken));
     }
