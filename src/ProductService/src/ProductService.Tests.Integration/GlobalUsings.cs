@@ -14,6 +14,7 @@ global using ProductService.Contracts.Requests.Pagination;
 global using ProductService.Contracts.Responses.Paged;
 global using ProductService.Tests.Shared;
 global using AutoBogus;
+global using ProductService.Contracts.SubTypes;
 
 #endregion
 

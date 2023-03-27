@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using Microsoft.EntityFrameworkCore;
-using ProductService.Contracts.SubTypes;
 
 namespace ProductService.Tests.Integration.V1.ProductsController;
 
