@@ -7,12 +7,12 @@ using FluentValidation;
 namespace ProductService.Contracts.SubTypes;
 
 /// <summary>
-///     FilterDataValidator
+///     FilterByDateOptionsValidator
 /// </summary>
-public sealed class FilterDataValidator : AbstractValidator<FilterData>
+public sealed class FilterByDateOptionsValidator : AbstractValidator<FilterByDateOptions>
 {
-    /// <summary>Initializes a new instance of the <see cref="FilterDataValidator" /> class.</summary>
-    public FilterDataValidator()
+    /// <summary>Initializes a new instance of the <see cref="FilterByDateOptionsValidator" /> class.</summary>
+    public FilterByDateOptionsValidator()
     {
         RuleFor(d => d.DateFrom)
             .LessThanOrEqualTo(DateTime.Now)

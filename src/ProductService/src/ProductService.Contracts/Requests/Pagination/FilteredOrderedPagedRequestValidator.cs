@@ -20,12 +20,12 @@ public sealed class FilteredOrderedPagedRequestValidator : AbstractValidator<Fil
     public FilteredOrderedPagedRequestValidator()
     {
         RuleFor(w => w.FilterData)
-            .SetValidator(new FilterDataValidator()!)
+            .SetValidator(new FilterByDateOptionsValidator()!)
             .When(item => item.FilterData is not null);
         RuleFor(w => w.PageData)
-            .SetValidator(new PageDataValidator()!)
+            .SetValidator(new PageOptionsValidator()!)
             .When(item => item.PageData is not null);
         RuleFor(w => w.OrderByData)
-            .SetValidator(new OrderByDataValidator());
+            .SetValidator(new OrderByOptionsValidator());
     }
 }

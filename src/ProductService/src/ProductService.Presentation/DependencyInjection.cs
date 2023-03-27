@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Reflection;
 using System.Text;
 using FluentValidation;
 using Mapster;
@@ -14,7 +18,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Products;
-using ProductService.Domain.Exceptions.Domain;
 using ProductService.Infrastructure.Database;
 using ProductService.Infrastructure.Mapping;
 using ProductService.Infrastructure.Options;
@@ -33,9 +36,15 @@ public static class DependencyInjection
 {
     internal static ConfigureHostBuilder AddSerilog(this ConfigureHostBuilder host)
     {
-        host.UseSerilog((ctx, lc) =>
-            lc.ReadFrom.Configuration(ctx.Configuration));
-
+        host.UseSerilog((context, services, configuration) =>
+            configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .ReadFrom.Services(services)
+                .Enrich.WithProperty("Application", context.HostingEnvironment.ApplicationName)
+                .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
+                .WriteTo.Conditional(
+                    x => context.HostingEnvironment.IsDevelopment(),
+                    x => x.Console().WriteTo.Debug()));
         return host;
     }
 
@@ -43,7 +52,13 @@ public static class DependencyInjection
     {
         services.AddOptions();
         services.Configure<AuthOptions>(configuration.GetSection("AuthOptions"));
-
+        return services;
+    }
+    internal static IServiceCollection AddCaching(this IServiceCollection services)
+    {
+        services.AddResponseCaching();
+        services.AddResponseCompression();
+        services.AddStackExchangeRedisCache(options => { });
         return services;
     }
 
@@ -166,7 +181,7 @@ public static class DependencyInjection
                             : new Uri(swaggerSection["TermsOfServiceUrl"]!),
                         License = licenseSection is null
                             ? null
-                            : new OpenApiLicense {Name = licenseSection["Name"], Url = new Uri(licenseSection["Url"]!)}
+                            : new OpenApiLicense { Name = licenseSection["Name"], Url = new Uri(licenseSection["Url"]!) }
                     });
             }
 
@@ -180,14 +195,15 @@ public static class DependencyInjection
                 Description = "Put ONLY your JWT Bearer token in text box below!",
                 Reference = new OpenApiReference
                 {
-                    Id = JwtBearerDefaults.AuthenticationScheme, Type = ReferenceType.SecurityScheme
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
                 }
             };
             options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement {{jwtSecurityScheme, Array.Empty<string>()}});
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
             var currentAssembly = Assembly.GetExecutingAssembly();
             var xmlDocs = currentAssembly.GetReferencedAssemblies()
-                .Union(new[] {currentAssembly.GetName()})
+                .Union(new[] { currentAssembly.GetName() })
                 .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location)!,
                     $"{a.Name}.xml"))
                 .Where(File.Exists).ToArray();
@@ -255,7 +271,7 @@ public static class DependencyInjection
         services.AddDbContext<AppDbContext>(options =>
         {
             var efConStr = configuration.GetConnectionString("DefaultConnection") ??
-                           throw new ConnectionStringIsNotValidException();
+                           throw new NullReferenceException("Connection string was not found");
             var contextOptions = options.UseSqlServer(efConStr).SetDefaultDbSettings();
             if (env.IsDevelopment())
             {

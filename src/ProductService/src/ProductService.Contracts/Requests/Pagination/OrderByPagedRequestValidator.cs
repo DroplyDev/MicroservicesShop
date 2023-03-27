@@ -21,9 +21,9 @@ public sealed class OrderByPagedRequestValidator : AbstractValidator<OrderedPage
     public OrderByPagedRequestValidator()
     {
         RuleFor(w => w.PageData)
-            .SetValidator(new PageDataValidator()!)
+            .SetValidator(new PageOptionsValidator()!)
             .When(item => item.PageData is not null);
         RuleFor(w => w.OrderByData)
-            .SetValidator(new OrderByDataValidator());
+            .SetValidator(new OrderByOptionsValidator());
     }
 }

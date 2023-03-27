@@ -5,7 +5,7 @@
 namespace ProductService.Contracts.SubTypes;
 
 /// <summary>Page data subtype</summary>
-public sealed class PageData
+public sealed class PageOptions
 {
     /// <summary>Item offset.</summary>
     /// <example>0</example>

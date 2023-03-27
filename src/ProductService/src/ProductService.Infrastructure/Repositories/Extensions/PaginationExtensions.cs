@@ -32,7 +32,7 @@ public static class PaginationExtensions
 
 
     public static async Task<PagedResponse<TEntity>> PaginateWithTotalCountAsListAsync<TEntity>(
-        this IQueryable<TEntity> query, PageData? pageData, CancellationToken cancellationToken)
+        this IQueryable<TEntity> query, PageOptions? pageData, CancellationToken cancellationToken)
     {
         if (pageData is not null)
         {
@@ -57,7 +57,7 @@ public static class PaginationExtensions
     }
 
     public static IQueryable<TEntity> Paginate<TEntity>(
-        this IQueryable<TEntity> query, PageData? pageData)
+        this IQueryable<TEntity> query, PageOptions? pageData)
     {
         return pageData is null ? query : query.Skip(pageData.Offset).Take(pageData.Limit);
     }

@@ -76,7 +76,7 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
         var request = new FilterOrderPageRequest
         {
             FilterData = null,
-            PageData = new PageData { Offset = 1, Limit = 2 },
+            PageData = new PageOptions { Offset = 1, Limit = 2 },
             OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
@@ -102,7 +102,7 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
         var request = new FilterOrderPageRequest
         {
             FilterData = null,
-            PageData = new PageData { Offset = -1, Limit = -1 },
+            PageData = new PageOptions { Offset = -1, Limit = -1 },
             OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
@@ -128,7 +128,7 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
 
         var request = new FilterOrderPageRequest
         {
-            FilterData = new FilterData { DateFrom = DateTime.MinValue, DateTo = DateTime.Now },
+            FilterData = new FilterByDateOptions { DateFrom = DateTime.MinValue, DateTo = DateTime.Now },
             OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
@@ -152,7 +152,7 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
         context.InitCategories();
         var request = new FilterOrderPageRequest
         {
-            FilterData = new FilterData { DateFrom = DateTime.Now.AddDays(1), DateTo = DateTime.Now.AddDays(-1) },
+            FilterData = new FilterByDateOptions { DateFrom = DateTime.Now.AddDays(1), DateTo = DateTime.Now.AddDays(-1) },
             OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
         };
         //Act
