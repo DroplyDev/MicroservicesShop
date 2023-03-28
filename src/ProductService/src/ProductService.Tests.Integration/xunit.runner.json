@@ -2,7 +2,7 @@
   "$schema": "https://xunit.net/schemas/2020/xunit.runner.schema.json",
   "diagnosticMessages": true,
   "internalDiagnosticMessages": true,
-  "maxParallelThreads": 8,
+  "maxParallelThreads": 4,
   "parallelizeAssembly": true,
   "parallelizeTestCollections": true,
   "preEnumerateTheories": true,

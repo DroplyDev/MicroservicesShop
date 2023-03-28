@@ -270,7 +270,7 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options =>
         {
-            var efConStr = configuration.GetConnectionString("DefaultConnection") ??
+            var efConStr = configuration.GetConnectionString("SqlServer") ??
                            throw new NullReferenceException("Connection string was not found");
             var contextOptions = options.UseSqlServer(efConStr).SetDefaultDbSettings();
             if (env.IsDevelopment())

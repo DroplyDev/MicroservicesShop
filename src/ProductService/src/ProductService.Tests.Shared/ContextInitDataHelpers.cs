@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using AutoBogus;
+using Bogus;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Domain;
 
@@ -10,16 +11,20 @@ namespace ProductService.Tests.Shared;
 
 public static class ContextInitDataHelpers
 {
+    static ContextInitDataHelpers()
+    {
+        Randomizer.Seed = new Random(1);
+    }
+
     public static List<Category> InitCategories(this DbContext context, int categoryCount = 5)
     {
         var data = new AutoFaker<Category>()
             .RuleFor(c => c.Id, _ => 0)
             .RuleFor(c => c.Name, f => f.Commerce.Categories(1)[0])
-            .RuleFor(p => p.Description, f => f.Lorem.Letter(500))
-            .Generate(categoryCount);
+            .RuleFor(p => p.Description, f => f.Lorem.Letter(500)).Generate(categoryCount);
+
         context.AddRange(data);
         context.SaveChanges();
-
         return data;
     }
 
@@ -31,8 +36,8 @@ public static class ContextInitDataHelpers
             .RuleFor(p => p.Name, f => f.Commerce.ProductName())
             .RuleFor(p => p.Description, f => f.Lorem.Letter(500))
             .RuleFor(p => p.Quantity, f => f.Random.Int(1, 100))
-            .RuleFor(p => p.Price, f => f.Random.Decimal(1, 1000))
-            .Generate(productCount);
+            .RuleFor(p => p.Price, f => f.Random.Decimal(1, 1000)).Generate(productCount);
+
         foreach (var item in data)
         {
             item.Category = categories.PickRandom();
@@ -47,8 +52,7 @@ public static class ContextInitDataHelpers
     public static List<ProductImage> InitProductImages(this DbContext context, int count = 5)
     {
         var data = new AutoFaker<ProductImage>()
-            .RuleFor(c => c.Id, _ => 0)
-            .Generate(count);
+            .RuleFor(c => c.Id, _ => 0).Generate(count);
         context.AddRange(data);
         context.SaveChanges();
 
@@ -71,17 +75,5 @@ public static class ContextInitDataHelpers
         }
 
         return await response.Content.ReadAsByteArrayAsync();
-    }
-
-    public static void Clear(this DbContext context)
-    {
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
-    }
-
-    public static async Task ClearAsync(this DbContext context)
-    {
-        await context.Database.EnsureDeletedAsync();
-        await context.Database.EnsureCreatedAsync();
     }
 }
