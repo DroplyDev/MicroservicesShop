@@ -1,6 +1,6 @@
 ﻿namespace ProductService.Infrastructure.Options;
 
-public sealed record AuthOptions
+public sealed record AuthConfiguration
 {
     public string Secret { get; init; } = null!;
     public bool ValidateSecret { get; init; }

@@ -12,7 +12,7 @@ using ProductService.Contracts.SubTypes;
 
 namespace ProductService.Application.Repositories.BaseRepo;
 
-public partial interface IBaseRepo<TEntity> where TEntity : class
+public partial interface IBaseGenericRepo<TEntity> where TEntity : class
 {
     (IQueryable<TEntity> Collection, int TotalCount) Paginate(int skipItems, int takeItems, string orderBy,
         OrderDirection orderDirection,
@@ -29,8 +29,8 @@ public partial interface IBaseRepo<TEntity> where TEntity : class
 
     #region Create
 
-    Task<TEntity> CreateAsync(TEntity entity);
-    Task<IEnumerable<TEntity>> CreateRangeAsync(IEnumerable<TEntity> entities);
+    Task<TEntity> AddAsync(TEntity entity);
+    Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities);
     Task CreateNoSaveAsync(TEntity entity);
 
     #endregion

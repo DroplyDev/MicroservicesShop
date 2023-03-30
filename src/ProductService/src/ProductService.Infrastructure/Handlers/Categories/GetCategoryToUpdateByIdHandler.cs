@@ -23,6 +23,6 @@ public sealed record GetCategoryToUpdateByIdHandler : IActionRequestHandler<GetC
         CancellationToken cancellationToken)
     {
         var category = await _categoryRepo.GetByIdAsync(request.Id, cancellationToken);
-        return new OkObjectResult(category.Adapt<CategoryDto>());
+        return new OkObjectResult(category.Adapt<CategoryUpdateDto>());
     }
 }

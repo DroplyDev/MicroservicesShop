@@ -7,6 +7,6 @@ using ProductService.Domain;
 
 namespace ProductService.Application.Repositories;
 
-public interface IProductImageRepo : IBaseRepo<ProductImage>
+public interface IProductImageRepo : IBaseGenericRepo<ProductImage>
 {
 }

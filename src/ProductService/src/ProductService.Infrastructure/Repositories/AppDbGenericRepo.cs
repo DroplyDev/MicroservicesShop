@@ -7,9 +7,9 @@ using ProductService.Infrastructure.Repositories.Base;
 
 namespace ProductService.Infrastructure.Repositories;
 
-public abstract class AppDbRepo<TEntity> : BaseGenericRepo<AppDbContext, TEntity> where TEntity : class
+public abstract class AppDbGenericRepo<TEntity> : BaseGenericRepo<AppDbContext, TEntity> where TEntity : class
 {
-    protected AppDbRepo(AppDbContext context) : base(context)
+    protected AppDbGenericRepo(AppDbContext context) : base(context)
     {
     }
 }

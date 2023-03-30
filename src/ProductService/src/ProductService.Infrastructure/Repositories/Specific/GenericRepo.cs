@@ -4,7 +4,7 @@ using ProductService.Infrastructure.Database;
 
 namespace ProductService.Infrastructure.Repositories.Specific;
 
-public sealed class CategoryRepo : AppDbRepo<Category>, ICategoryRepo
+public sealed class CategoryRepo : AppDbGenericRepo<Category>, ICategoryRepo
 {
     public CategoryRepo(AppDbContext context) : base(context)
     {

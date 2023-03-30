@@ -9,7 +9,7 @@ using ProductService.Domain;
 
 namespace ProductService.Application.Repositories;
 
-public interface IProductRepo : IBaseRepo<Product>
+public interface IProductRepo : IBaseGenericRepo<Product>
 {
     Task<Product?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
 

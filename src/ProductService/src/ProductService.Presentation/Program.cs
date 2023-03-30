@@ -35,6 +35,7 @@ services.AddMapster();
 services.AddMediatorService();
 services.AddHttpContextAccessor();
 services.AddRouting();
+services.AddCaching(configuration);
 // Add useful interface for accessing the ActionContext outside a controller.
 services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 // Build app
@@ -89,5 +90,5 @@ catch (Exception exception)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }

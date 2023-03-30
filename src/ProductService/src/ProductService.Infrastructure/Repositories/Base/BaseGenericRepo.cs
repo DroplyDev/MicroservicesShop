@@ -10,7 +10,7 @@ using ProductService.Domain.Exceptions.Entity;
 
 namespace ProductService.Infrastructure.Repositories.Base;
 
-public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseRepo<TEntity>
+public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseGenericRepo<TEntity>
     where TEntity : class where TContext : DbContext
 {
     protected readonly TContext Context;
@@ -28,16 +28,16 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseRepo<TEn
 
     public async Task<TEntity> GetByIdAsync(object id, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FindAsync(new[] {id}, cancellationToken) ??
+        return await DbSet.FindAsync(new[] { id }, cancellationToken) ??
                throw new EntityNotFoundByIdException<TEntity>(id);
     }
 
     public async Task<TEntity?> GetByIdOrDefaultAsync(object id, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FindAsync(new[] {id}, cancellationToken);
+        return await DbSet.FindAsync(new[] { id }, cancellationToken);
     }
 
-    public async Task<TEntity> CreateAsync(TEntity entity)
+    public async Task<TEntity> AddAsync(TEntity entity)
     {
         await CreateNoSaveAsync(entity);
         await SaveChangesAsync();
@@ -45,7 +45,7 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseRepo<TEn
     }
 
 
-    public virtual async Task<IEnumerable<TEntity>> CreateRangeAsync(IEnumerable<TEntity> entities)
+    public virtual async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities)
     {
         var rangeAsync = entities.ToList();
         await DbSet.AddRangeAsync(rangeAsync);

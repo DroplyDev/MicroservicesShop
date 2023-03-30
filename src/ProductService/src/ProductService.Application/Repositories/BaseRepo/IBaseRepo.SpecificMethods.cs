@@ -12,7 +12,7 @@ using Rusty.Template.Contracts.Requests;
 
 namespace ProductService.Application.Repositories.BaseRepo;
 
-public partial interface IBaseRepo<TEntity> where TEntity : class
+public partial interface IBaseGenericRepo<TEntity> where TEntity : class
 {
     #region Pagination
 

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Configuration;
 using System.Reflection;
 using System.Text;
 using FluentValidation;
@@ -16,8 +17,11 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ProductService.Application.Cache;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Products;
+using ProductService.Domain;
+using ProductService.Infrastructure.Cache;
 using ProductService.Infrastructure.Database;
 using ProductService.Infrastructure.Mapping;
 using ProductService.Infrastructure.Options;
@@ -25,6 +29,7 @@ using ProductService.Infrastructure.Repositories.Specific;
 using ProductService.Presentation.OperationFilters;
 using ProductService.Presentation.SchemaFilters;
 using Serilog;
+using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Filters;
@@ -51,14 +56,32 @@ public static class DependencyInjection
     internal static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddOptions();
-        services.Configure<AuthOptions>(configuration.GetSection("AuthOptions"));
+        services.Configure<AuthConfiguration>(configuration.GetSection("AuthConfiguration"));
+        services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
         return services;
     }
-    internal static IServiceCollection AddCaching(this IServiceCollection services)
+    internal static IServiceCollection AddCaching(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddResponseCaching();
         services.AddResponseCompression();
-        services.AddStackExchangeRedisCache(options => { });
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+            options.InstanceName = "ProductService";
+        });
+        services.AddMemoryCache();
+        var cacheType = configuration.GetSection("CacheConfiguration")["CacheType"];
+        switch (cacheType)
+        {
+            case "Destributed":
+                services.AddScoped<ICacheService, RedisCacheService>();
+                break;
+            case "Memory":
+                services.AddScoped<ICacheService, MemoryCacheService>();
+                break;
+            default:
+                throw new ArgumentException("Cache type is not valid");
+        }
         return services;
     }
 
@@ -91,7 +114,7 @@ public static class DependencyInjection
 
     internal static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
-        var authOptions = configuration.GetSection("AuthOptions").Get<AuthOptions>() ??
+        var authOptions = configuration.GetSection("AuthConfiguration").Get<AuthConfiguration>() ??
                           throw new NullReferenceException();
         services.AddCors(options =>
         {

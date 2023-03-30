@@ -4,8 +4,12 @@
 
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using ProductService.Application.Cache;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Products;
+using ProductService.Domain;
+using ProductService.Infrastructure.Extensions;
 using ProductService.Infrastructure.Requests.Products;
 
 namespace ProductService.Infrastructure.Handlers.Products;
@@ -13,10 +17,12 @@ namespace ProductService.Infrastructure.Handlers.Products;
 public sealed record GetProductByIdHandler : IActionRequestHandler<GetProductByIdRequest>
 {
     private readonly IProductRepo _productRepo;
+    private readonly ICacheService _cacheService;
 
-    public GetProductByIdHandler(IProductRepo productRepo)
+    public GetProductByIdHandler(IProductRepo productRepo, ICacheService cacheService)
     {
         _productRepo = productRepo;
+        _cacheService = cacheService;
     }
 
     public async ValueTask<IActionResult> Handle(GetProductByIdRequest request, CancellationToken cancellationToken)
