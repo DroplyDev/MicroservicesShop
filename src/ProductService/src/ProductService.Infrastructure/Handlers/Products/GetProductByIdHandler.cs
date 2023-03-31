@@ -5,7 +5,7 @@
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using ProductService.Application.Cache;
+using ProductService.Application.Caching;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Products;
 using ProductService.Domain;

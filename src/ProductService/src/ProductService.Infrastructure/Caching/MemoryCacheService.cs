@@ -2,17 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using ProductService.Application.Cache;
+using ProductService.Application.Caching;
 using ProductService.Infrastructure.Options;
 
-namespace ProductService.Infrastructure.Cache;
+namespace ProductService.Infrastructure.Caching;
 public class MemoryCacheService : ICacheService
 {
     private readonly IMemoryCache _memoryCache;

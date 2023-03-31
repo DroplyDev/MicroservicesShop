@@ -4,7 +4,7 @@
 
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using ProductService.Application.Cache;
+using ProductService.Application.Caching;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Products;
 using ProductService.Contracts.Requests.Pagination;

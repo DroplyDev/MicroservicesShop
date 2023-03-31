@@ -2,21 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using ProductService.Application.Cache;
+using ProductService.Application.Caching;
 using ProductService.Infrastructure.Options;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace ProductService.Infrastructure.Cache;
+namespace ProductService.Infrastructure.Caching;
 public class RedisCacheService : ICacheService
 {
     private readonly IDistributedCache _cache;
