@@ -6,6 +6,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Application.Caching;
 using ProductService.Application.Repositories;
+using ProductService.Contracts.Dtos.Categories;
 using ProductService.Contracts.Dtos.Products;
 using ProductService.Contracts.Requests.Pagination;
 using ProductService.Contracts.Responses;
@@ -32,10 +33,10 @@ public sealed record GetPagedCategoriesHandler : IActionRequestHandler<GetPagedC
         await _validator.ValidateAndThrowAsync(request.Params, cancellationToken);
 
         var cacheKey = $"{nameof(Category)}_{request.Params.FilterData?.DateFrom}_{request.Params.FilterData?.DateTo}{request.Params.PageData?.Offset}_{request.Params.PageData?.Limit}_{request.Params.OrderByData?.OrderBy}_{request.Params.OrderByData?.OrderDirection}";
-        var data = await _cacheService.GetAsync<PagedResponse<ProductDto>>(cacheKey);
+        var data = await _cacheService.GetAsync<PagedResponse<CategoryDto>>(cacheKey);
         if (data is null)
         {
-            data = await _categoryRepo.PaginateAsync<ProductDto>(request.Params, cancellationToken);
+            data = await _categoryRepo.PaginateAsync<CategoryDto>(request.Params, cancellationToken);
             await _cacheService.SetAsync(cacheKey, data);
         }
         return new OkObjectResult(data);
