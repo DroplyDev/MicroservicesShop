@@ -60,6 +60,7 @@ try
         app.UseHsts();
     }
 
+    app.UseHealthChecks("/health");
     app.UseHttpsRedirection();
     app.UseSwagger();
     app.UseSwaggerUI(options =>

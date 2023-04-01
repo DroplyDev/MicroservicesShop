@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProductService.Application.Caching;
@@ -62,11 +64,12 @@ public static class DependencyInjection
     }
     internal static IServiceCollection AddCaching(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddResponseCaching();
         services.AddResponseCompression();
+        var redisConnectionString = configuration.GetConnectionString("Redis")
+                                    ?? throw new NullReferenceException("Redis connection string was not found");
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = configuration.GetConnectionString("Redis");
+            options.Configuration = redisConnectionString;
             options.InstanceName = "ProductService";
         });
         services.AddMemoryCache();
@@ -82,6 +85,10 @@ public static class DependencyInjection
             default:
                 throw new ArgumentException("Cache type is not valid");
         }
+
+        services.AddHealthChecks()
+            .AddRedis(redisConnectionString, "redis", HealthStatus.Unhealthy);
+
         return services;
     }
 
