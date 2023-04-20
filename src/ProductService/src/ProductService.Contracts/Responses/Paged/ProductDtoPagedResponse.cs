@@ -1,8 +1,4 @@
-﻿region
-
-using ProductService.Contracts.Dtos.Products;
-
-#endregion
+﻿using ProductService.Contracts.Dtos.Products;
 
 namespace ProductService.Contracts.Responses.Paged;
 

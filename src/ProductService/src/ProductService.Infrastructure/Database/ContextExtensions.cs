@@ -1,9 +1,5 @@
-region
-
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-
-#endregion
 
 namespace ProductService.Infrastructure.Database;
 

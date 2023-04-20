@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Mapster;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.ProductImage;
 using ProductService.Contracts.Responses;
@@ -67,7 +69,7 @@ public sealed class ProductImagesController : BaseApiController
     {
         var product = await _productRepo.FirstOrDefaultAsTrackingAsync(p => p.Id == productId) ??
                       throw new EntityNotFoundByIdException<Product>(productId);
-        product.ProductImages.Add(new ProductImage {Icon = await FileManagerService.FormFileToByteArrayAsync(image)});
+        product.ProductImages.Add(new ProductImage { Icon = await FileManagerService.FormFileToByteArrayAsync(image) });
         await _productRepo.SaveChangesAsync();
         return NoContent();
     }

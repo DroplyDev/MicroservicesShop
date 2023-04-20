@@ -24,7 +24,7 @@ services.AddConfigurations(configuration);
 services.AddLogging();
 services.AddFluentValidation();
 services.AddControllers(options => options.Conventions.Add(new KebabCaseControllerModelConvention()))
-	.AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 services.AddEndpointsApiExplorer();
 services.AddRepositories();
 services.AddServices();
@@ -39,54 +39,54 @@ services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 WebApplication app = null!;
 try
 {
-	Log.Information("Initializing");
-	app = builder.Build();
-	// set Serilog request logging
-	app.UseSerilogRequestLogging(configure =>
-	{
-		configure.MessageTemplate =
-			"HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000}ms";
-	});
-	// Configure the HTTP request pipeline.
-	if (app.Environment.IsDevelopment())
-	{
-		app.UseDeveloperExceptionPage();
-	}
-	else
-	{
-		app.UseHsts();
-	}
+    Log.Information("Initializing");
+    app = builder.Build();
+    // set Serilog request logging
+    app.UseSerilogRequestLogging(configure =>
+    {
+        configure.MessageTemplate =
+            "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000}ms";
+    });
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+    }
+    else
+    {
+        app.UseHsts();
+    }
 
-	app.UseHealthChecks("/health");
-	app.UseHttpsRedirection();
-	app.UseSwagger();
-	app.UseSwaggerUI(options =>
-	{
-		var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-		foreach (var groupName in provider.ApiVersionDescriptions.Select(item => item.GroupName))
-		{
-			options.SwaggerEndpoint($"../swagger/{groupName}/swagger.json",
-				groupName.ToUpperInvariant());
-		}
-	});
-	app.UseRouting();
-	app.UseCors("All");
+    app.UseHealthChecks("/health");
+    app.UseHttpsRedirection();
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+        foreach (var groupName in provider.ApiVersionDescriptions.Select(item => item.GroupName))
+        {
+            options.SwaggerEndpoint($"../swagger/{groupName}/swagger.json",
+                groupName.ToUpperInvariant());
+        }
+    });
+    app.UseRouting();
+    app.UseCors("All");
 
-	app.UseMiddleware<ExceptionHandlingMiddleware>();
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-	app.UseAuthentication();
-	app.UseAuthorization();
+    app.UseAuthentication();
+    app.UseAuthorization();
 
-	app.MapControllers();
+    app.MapControllers();
 
-	await app.RunAsync().ConfigureAwait(false);
-	app.LogApplicationStopped();
+    await app.RunAsync().ConfigureAwait(false);
+    app.LogApplicationStopped();
 }
 catch (Exception exception)
 {
-	app.LogApplicationTerminatedUnexpectedly(exception);
+    app.LogApplicationTerminatedUnexpectedly(exception);
 }
 finally
 {
-	await Log.CloseAndFlushAsync();
+    await Log.CloseAndFlushAsync();
 }

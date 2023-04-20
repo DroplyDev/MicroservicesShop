@@ -13,31 +13,31 @@ public sealed record GetPagedProductsRequest(FilterOrderPageRequest Params) : IA
 
 public sealed record GetPagedProductsHandler : IActionRequestHandler<GetPagedProductsRequest>
 {
-	private readonly ICacheService _cacheService;
-	private readonly IProductRepo _productRepo;
-	private readonly IValidator<FilterOrderPageRequest> _validator;
+    private readonly ICacheService _cacheService;
+    private readonly IProductRepo _productRepo;
+    private readonly IValidator<FilterOrderPageRequest> _validator;
 
-	public GetPagedProductsHandler(IProductRepo productRepo, IValidator<FilterOrderPageRequest> validator,
-		ICacheService cacheService)
-	{
-		_productRepo = productRepo;
-		_validator = validator;
-		_cacheService = cacheService;
-	}
+    public GetPagedProductsHandler(IProductRepo productRepo, IValidator<FilterOrderPageRequest> validator,
+        ICacheService cacheService)
+    {
+        _productRepo = productRepo;
+        _validator = validator;
+        _cacheService = cacheService;
+    }
 
-	public async ValueTask<IActionResult> Handle(GetPagedProductsRequest request, CancellationToken cancellationToken)
-	{
-		await _validator.ValidateAndThrowAsync(request.Params, cancellationToken);
+    public async ValueTask<IActionResult> Handle(GetPagedProductsRequest request, CancellationToken cancellationToken)
+    {
+        await _validator.ValidateAndThrowAsync(request.Params, cancellationToken);
 
-		var cacheKey =
-			$"{nameof(Product)}_{request.Params.FilterData?.DateFrom}_{request.Params.FilterData?.DateTo}{request.Params.PageData?.Offset}_{request.Params.PageData?.Limit}_{request.Params.OrderByData?.OrderBy}_{request.Params.OrderByData?.OrderDirection}";
-		var data = await _cacheService.GetAsync<PagedResponse<ProductDto>>(cacheKey);
-		if (data is null)
-		{
-			data = await _productRepo.PaginateAsync<ProductDto>(request.Params, cancellationToken);
-			await _cacheService.SetAsync(cacheKey, data);
-		}
+        var cacheKey =
+            $"{nameof(Product)}_{request.Params.FilterData?.DateFrom}_{request.Params.FilterData?.DateTo}{request.Params.PageData?.Offset}_{request.Params.PageData?.Limit}_{request.Params.OrderByData?.OrderBy}_{request.Params.OrderByData?.OrderDirection}";
+        var data = await _cacheService.GetAsync<PagedResponse<ProductDto>>(cacheKey);
+        if (data is null)
+        {
+            data = await _productRepo.PaginateAsync<ProductDto>(request.Params, cancellationToken);
+            await _cacheService.SetAsync(cacheKey, data);
+        }
 
-		return new OkObjectResult(await _productRepo.PaginateAsync<ProductDto>(request.Params, cancellationToken));
-	}
+        return new OkObjectResult(await _productRepo.PaginateAsync<ProductDto>(request.Params, cancellationToken));
+    }
 }

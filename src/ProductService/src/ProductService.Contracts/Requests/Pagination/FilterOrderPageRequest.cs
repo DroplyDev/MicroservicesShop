@@ -1,9 +1,5 @@
-﻿region
-
-using ProductService.Contracts.SubTypes;
+﻿using ProductService.Contracts.SubTypes;
 using Rusty.Template.Contracts.Requests;
-
-#endregion
 
 namespace ProductService.Contracts.Requests.Pagination;
 

@@ -1,10 +1,6 @@
-﻿region
-
-using FluentValidation;
+﻿using FluentValidation;
 using ProductService.Contracts.SubTypes;
 using Rusty.Template.Contracts.Requests;
-
-#endregion
 
 namespace ProductService.Contracts.Requests.Pagination;
 

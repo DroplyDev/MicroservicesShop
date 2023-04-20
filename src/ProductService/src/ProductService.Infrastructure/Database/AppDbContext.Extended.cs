@@ -1,8 +1,4 @@
-﻿region
-
-using Microsoft.EntityFrameworkCore;
-
-#endregion
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ProductService.Infrastructure.Database;
 

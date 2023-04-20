@@ -1,8 +1,4 @@
-﻿region
-
-using FluentValidation.Results;
-
-#endregion
+﻿using FluentValidation.Results;
 
 namespace ProductService.Contracts.Responses;
 

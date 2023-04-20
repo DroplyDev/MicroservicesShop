@@ -1,8 +1,4 @@
-region
-
-using Microsoft.AspNetCore.Authorization;
-
-#endregion
+﻿using Microsoft.AspNetCore.Authorization;
 
 namespace ProductService.Infrastructure.Attributes;
 

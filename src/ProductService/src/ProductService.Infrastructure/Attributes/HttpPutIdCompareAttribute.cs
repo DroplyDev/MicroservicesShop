@@ -1,9 +1,5 @@
-region
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-
-#endregion
 
 namespace ProductService.Infrastructure.Attributes;
 

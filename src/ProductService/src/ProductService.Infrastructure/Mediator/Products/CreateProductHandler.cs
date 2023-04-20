@@ -13,28 +13,28 @@ public sealed record CreateProductRequest(ProductCreateDto Dto) : IActionRequest
 
 public sealed record CreateProductHandler : IActionRequestHandler<CreateProductRequest>
 {
-	private readonly IActionContextAccessor _actionContextAccessor;
-	private readonly IProductRepo _productRepo;
-	private readonly IValidator<ProductCreateDto> _validator;
+    private readonly IActionContextAccessor _actionContextAccessor;
+    private readonly IProductRepo _productRepo;
+    private readonly IValidator<ProductCreateDto> _validator;
 
-	public CreateProductHandler(IProductRepo productRepo, IActionContextAccessor actionContextAccessor,
-		IValidator<ProductCreateDto> validator)
-	{
-		_productRepo = productRepo;
-		_actionContextAccessor = actionContextAccessor;
-		_validator = validator;
-	}
+    public CreateProductHandler(IProductRepo productRepo, IActionContextAccessor actionContextAccessor,
+        IValidator<ProductCreateDto> validator)
+    {
+        _productRepo = productRepo;
+        _actionContextAccessor = actionContextAccessor;
+        _validator = validator;
+    }
 
-	public async ValueTask<IActionResult> Handle(CreateProductRequest request, CancellationToken cancellationToken)
-	{
-		await _validator.ValidateAndThrowAsync(request.Dto, cancellationToken);
-		if (await _productRepo.ExistsAsync(p => p.Name == request.Dto.Name, cancellationToken))
-		{
-			throw new EntityWitNameAlreadyExistsException<Product>(request.Dto.Name);
-		}
+    public async ValueTask<IActionResult> Handle(CreateProductRequest request, CancellationToken cancellationToken)
+    {
+        await _validator.ValidateAndThrowAsync(request.Dto, cancellationToken);
+        if (await _productRepo.ExistsAsync(p => p.Name == request.Dto.Name, cancellationToken))
+        {
+            throw new EntityWitNameAlreadyExistsException<Product>(request.Dto.Name);
+        }
 
-		var product = await _productRepo.AddAsync(request.Dto.Adapt<Product>());
-		return new CreatedAtActionResult("GetProductById", "Products", new { id = product.Id },
-			product.Adapt<ProductDto>());
-	}
+        var product = await _productRepo.AddAsync(request.Dto.Adapt<Product>());
+        return new CreatedAtActionResult("GetProductById", "Products", new {id = product.Id},
+            product.Adapt<ProductDto>());
+    }
 }

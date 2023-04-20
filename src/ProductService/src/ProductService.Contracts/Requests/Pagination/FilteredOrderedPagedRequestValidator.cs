@@ -1,9 +1,5 @@
-﻿region
-
-using FluentValidation;
+﻿using FluentValidation;
 using ProductService.Contracts.SubTypes;
-
-#endregion
 
 namespace ProductService.Contracts.Requests.Pagination;
 

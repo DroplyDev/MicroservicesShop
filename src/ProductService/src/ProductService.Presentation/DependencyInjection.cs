@@ -33,314 +33,313 @@ namespace ProductService.Presentation;
 
 public static class DependencyInjection
 {
-	internal static ConfigureHostBuilder AddSerilog(this ConfigureHostBuilder host)
-	{
-		host.UseSerilog((context, services, configuration) =>
-			configuration
-				.ReadFrom.Configuration(context.Configuration)
-				.ReadFrom.Services(services)
-				.Enrich.WithProperty("Application", context.HostingEnvironment.ApplicationName)
-				.Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
-				.WriteTo.Conditional(
-					x => context.HostingEnvironment.IsDevelopment(),
-					x => x.Console().WriteTo.Debug()));
-		return host;
-	}
+    internal static ConfigureHostBuilder AddSerilog(this ConfigureHostBuilder host)
+    {
+        host.UseSerilog((context, services, configuration) =>
+            configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .ReadFrom.Services(services)
+                .Enrich.WithProperty("Application", context.HostingEnvironment.ApplicationName)
+                .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
+                .WriteTo.Conditional(
+                    x => context.HostingEnvironment.IsDevelopment(),
+                    x => x.Console().WriteTo.Debug()));
+        return host;
+    }
 
-	internal static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
-	{
-		services.AddOptions();
-		services.Configure<AuthConfiguration>(configuration.GetSection("AuthConfiguration"));
-		services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
-		return services;
-	}
+    internal static IServiceCollection AddConfigurations(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddOptions();
+        services.Configure<AuthConfiguration>(configuration.GetSection("AuthConfiguration"));
+        services.Configure<CacheConfiguration>(configuration.GetSection("CacheConfiguration"));
+        return services;
+    }
 
-	internal static IServiceCollection AddCaching(this IServiceCollection services, IConfiguration configuration)
-	{
-		services.AddResponseCompression();
-		var redisConnectionString = configuration.GetConnectionString("Redis")
-									?? throw new NullReferenceException("Redis connection string was not found");
-		services.AddStackExchangeRedisCache(options =>
-		{
-			options.Configuration = redisConnectionString;
-			options.InstanceName = "ProductService";
-		});
-		services.AddMemoryCache();
-		var cacheType = configuration.GetSection("CacheConfiguration")["CacheType"];
-		switch (cacheType)
-		{
-			case "Destributed":
-				services.AddScoped<ICacheService, RedisCacheService>();
-				break;
-			case "Memory":
-				services.AddScoped<ICacheService, MemoryCacheService>();
-				break;
-			default:
-				throw new ArgumentException("Cache type is not valid");
-		}
+    internal static IServiceCollection AddCaching(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddResponseCompression();
+        var redisConnectionString = configuration.GetConnectionString("Redis")
+                                    ?? throw new NullReferenceException("Redis connection string was not found");
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = redisConnectionString;
+            options.InstanceName = "ProductService";
+        });
+        services.AddMemoryCache();
+        var cacheType = configuration.GetSection("CacheConfiguration")["CacheType"];
+        switch (cacheType)
+        {
+            case "Destributed":
+                services.AddScoped<ICacheService, RedisCacheService>();
+                break;
+            case "Memory":
+                services.AddScoped<ICacheService, MemoryCacheService>();
+                break;
+            default:
+                throw new ArgumentException("Cache type is not valid");
+        }
 
-		services.AddHealthChecks()
-			.AddRedis(redisConnectionString, "redis", HealthStatus.Unhealthy);
+        services.AddHealthChecks()
+            .AddRedis(redisConnectionString, "redis", HealthStatus.Unhealthy);
 
-		return services;
-	}
+        return services;
+    }
 
-	internal static IServiceCollection AddApiVersioningSupport(this IServiceCollection services)
-	{
-		services.AddApiVersioning(options =>
-		{
-			options.DefaultApiVersion = new ApiVersion(DateTime.Now);
-			options.AssumeDefaultVersionWhenUnspecified = true;
-			options.RegisterMiddleware = true;
-			options.ReportApiVersions = true;
-			options.ApiVersionReader = new UrlSegmentApiVersionReader();
-		});
-		services.AddVersionedApiExplorer(options =>
-		{
-			options.GroupNameFormat = "'v'VV";
-			options.SubstituteApiVersionInUrl = true;
-		});
+    internal static IServiceCollection AddApiVersioningSupport(this IServiceCollection services)
+    {
+        services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new ApiVersion(DateTime.Now);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.RegisterMiddleware = true;
+            options.ReportApiVersions = true;
+            options.ApiVersionReader = new UrlSegmentApiVersionReader();
+        });
+        services.AddVersionedApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VV";
+            options.SubstituteApiVersionInUrl = true;
+        });
 
-		return services;
-	}
+        return services;
+    }
 
-	internal static IServiceCollection AddFluentValidation(this IServiceCollection services)
-	{
-		ValidatorOptions.Global.DefaultClassLevelCascadeMode = CascadeMode.Continue;
-		ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Continue;
-		services.AddValidatorsFromAssemblyContaining<ProductCreateDtoValidator>();
-		return services;
-	}
+    internal static IServiceCollection AddFluentValidation(this IServiceCollection services)
+    {
+        ValidatorOptions.Global.DefaultClassLevelCascadeMode = CascadeMode.Continue;
+        ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Continue;
+        services.AddValidatorsFromAssemblyContaining<ProductCreateDtoValidator>();
+        return services;
+    }
 
-	internal static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
-	{
-		var authOptions = configuration.GetSection("AuthConfiguration").Get<AuthConfiguration>() ??
-						  throw new NullReferenceException();
-		services.AddCors(options =>
-		{
-			options.AddPolicy("All", builder =>
-			{
-				builder.WithOrigins("*")
-					.AllowAnyMethod()
-					.AllowAnyHeader();
-			});
-		});
-		services.AddAuthentication(options =>
-			{
-				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-			})
-			.AddJwtBearer(options =>
-			{
-				options.SaveToken = true;
-				options.TokenValidationParameters = new TokenValidationParameters
-				{
-					ValidateIssuer = authOptions.ValidateIssuer,
-					ValidIssuer = authOptions.Issuer,
-					ValidateAudience = authOptions.ValidateAudience,
-					ValidAudience = authOptions.Audience,
-					ValidateLifetime = authOptions.ValidateAccessTokenLifetime,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(authOptions.Secret)),
-					ValidateIssuerSigningKey = authOptions.ValidateSecret
-				};
-				options.Events = new JwtBearerEvents
-				{
-					OnChallenge = async context =>
-					{
-						context.HandleResponse();
-						context.Response.StatusCode = 401;
-						context.Response.ContentType = "application/json";
-						if (context.AuthenticateFailure?.GetType() == typeof(SecurityTokenExpiredException))
-						{
-							await context.Response.WriteAsJsonAsync(
-								new SecurityTokenExpiredException("Token expired"));
-							return;
-						}
+    internal static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
+    {
+        var authOptions = configuration.GetSection("AuthConfiguration").Get<AuthConfiguration>() ??
+                          throw new NullReferenceException();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("All", builder =>
+            {
+                builder.WithOrigins("*")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = authOptions.ValidateIssuer,
+                    ValidIssuer = authOptions.Issuer,
+                    ValidateAudience = authOptions.ValidateAudience,
+                    ValidAudience = authOptions.Audience,
+                    ValidateLifetime = authOptions.ValidateAccessTokenLifetime,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(authOptions.Secret)),
+                    ValidateIssuerSigningKey = authOptions.ValidateSecret
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnChallenge = async context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+                        if (context.AuthenticateFailure?.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            await context.Response.WriteAsJsonAsync(
+                                new SecurityTokenExpiredException("Token expired"));
+                            return;
+                        }
 
-						await context.Response.WriteAsync("Not authorized");
-					},
-					// OnForbidden = context => { },
-					OnAuthenticationFailed = context =>
-					{
-						if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-						{
-							context.Response.Headers.Add("Token-Expired", "true");
-						}
+                        await context.Response.WriteAsync("Not authorized");
+                    },
+                    // OnForbidden = context => { },
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
 
-						return Task.CompletedTask;
-					}
-				};
-			});
-		services.AddAuthorization(options =>
-		{
-			options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-				.RequireAuthenticatedUser()
-				.Build();
-		});
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+        services.AddAuthorization(options =>
+        {
+            options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+        });
 
-		return services;
-	}
+        return services;
+    }
 
-	internal static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration)
-	{
-		services.AddSwaggerGen(options =>
-		{
-			var provider = services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
-			var swaggerSection = configuration.GetSection("Swagger");
-			var licenseSection = swaggerSection.GetSection("License");
-			foreach (var description in provider.ApiVersionDescriptions)
-			{
-				options.SwaggerDoc(
-					description.GroupName,
-					new OpenApiInfo
-					{
-						Title = swaggerSection["Title"],
-						Description = swaggerSection["Description"] +
-									  (description.IsDeprecated ? " [DEPRECATED]" : string.Empty),
-						Version = description.ApiVersion.ToString(),
-						TermsOfService = string.IsNullOrEmpty(swaggerSection["TermsOfServiceUrl"])
-							? null
-							: new Uri(swaggerSection["TermsOfServiceUrl"]!),
-						License = licenseSection is null
-							? null
-							: new OpenApiLicense { Name = licenseSection["Name"], Url = new Uri(licenseSection["Url"]!) }
-					});
-			}
+    internal static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSwaggerGen(options =>
+        {
+            var provider = services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
+            var swaggerSection = configuration.GetSection("Swagger");
+            var licenseSection = swaggerSection.GetSection("License");
+            foreach (var description in provider.ApiVersionDescriptions)
+            {
+                options.SwaggerDoc(
+                    description.GroupName,
+                    new OpenApiInfo
+                    {
+                        Title = swaggerSection["Title"],
+                        Description = swaggerSection["Description"] +
+                                      (description.IsDeprecated ? " [DEPRECATED]" : string.Empty),
+                        Version = description.ApiVersion.ToString(),
+                        TermsOfService = string.IsNullOrEmpty(swaggerSection["TermsOfServiceUrl"])
+                            ? null
+                            : new Uri(swaggerSection["TermsOfServiceUrl"]!),
+                        License = licenseSection is null
+                            ? null
+                            : new OpenApiLicense {Name = licenseSection["Name"], Url = new Uri(licenseSection["Url"]!)}
+                    });
+            }
 
-			var jwtSecurityScheme = new OpenApiSecurityScheme
-			{
-				BearerFormat = "JWT",
-				Name = "JWT Authentication",
-				In = ParameterLocation.Header,
-				Type = SecuritySchemeType.Http,
-				Scheme = JwtBearerDefaults.AuthenticationScheme,
-				Description = "Put ONLY your JWT Bearer token in text box below!",
-				Reference = new OpenApiReference
-				{
-					Id = JwtBearerDefaults.AuthenticationScheme,
-					Type = ReferenceType.SecurityScheme
-				}
-			};
-			options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-			options.AddSecurityRequirement(new OpenApiSecurityRequirement { { jwtSecurityScheme, Array.Empty<string>() } });
-			var currentAssembly = Assembly.GetExecutingAssembly();
-			var xmlDocs = currentAssembly.GetReferencedAssemblies()
-				.Union(new[] { currentAssembly.GetName() })
-				.Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location)!,
-					$"{a.Name}.xml"))
-				.Where(File.Exists).ToArray();
-			Array.ForEach(xmlDocs, d => { options.IncludeXmlCommentsWithRemarks(d); });
-			options.AddEnumsWithValuesFixFilters(o =>
-			{
-				// add schema filter to fix enums (add 'x-enumNames' for NSwag or its alias from XEnumNamesAlias) in schema
-				o.ApplySchemaFilter = true;
-				// alias for replacing 'x-enumNames' in swagger document
-				o.XEnumNamesAlias = "x-enum-varnames";
+            var jwtSecurityScheme = new OpenApiSecurityScheme
+            {
+                BearerFormat = "JWT",
+                Name = "JWT Authentication",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                Description = "Put ONLY your JWT Bearer token in text box below!",
+                Reference = new OpenApiReference
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme, Type = ReferenceType.SecurityScheme
+                }
+            };
+            options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement {{jwtSecurityScheme, Array.Empty<string>()}});
+            var currentAssembly = Assembly.GetExecutingAssembly();
+            var xmlDocs = currentAssembly.GetReferencedAssemblies()
+                .Union(new[] {currentAssembly.GetName()})
+                .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location)!,
+                    $"{a.Name}.xml"))
+                .Where(File.Exists).ToArray();
+            Array.ForEach(xmlDocs, d => { options.IncludeXmlCommentsWithRemarks(d); });
+            options.AddEnumsWithValuesFixFilters(o =>
+            {
+                // add schema filter to fix enums (add 'x-enumNames' for NSwag or its alias from XEnumNamesAlias) in schema
+                o.ApplySchemaFilter = true;
+                // alias for replacing 'x-enumNames' in swagger document
+                o.XEnumNamesAlias = "x-enum-varnames";
 
-				// alias for replacing 'x-enumDescriptions' in swagger document
-				o.XEnumDescriptionsAlias = "x-enum-descriptions";
+                // alias for replacing 'x-enumDescriptions' in swagger document
+                o.XEnumDescriptionsAlias = "x-enum-descriptions";
 
-				// add parameter filter to fix enums (add 'x-enumNames' for NSwag or its alias from XEnumNamesAlias) in schema parameters
-				o.ApplyParameterFilter = true;
+                // add parameter filter to fix enums (add 'x-enumNames' for NSwag or its alias from XEnumNamesAlias) in schema parameters
+                o.ApplyParameterFilter = true;
 
-				// add document filter to fix enums displaying in swagger document
-				o.ApplyDocumentFilter = true;
+                // add document filter to fix enums displaying in swagger document
+                o.ApplyDocumentFilter = true;
 
-				// add descriptions from DescriptionAttribute or xml-comments to fix enums (add 'x-enumDescriptions' or its alias from XEnumDescriptionsAlias for schema extensions) for applied filters
-				o.IncludeDescriptions = true;
+                // add descriptions from DescriptionAttribute or xml-comments to fix enums (add 'x-enumDescriptions' or its alias from XEnumDescriptionsAlias for schema extensions) for applied filters
+                o.IncludeDescriptions = true;
 
-				// add remarks for descriptions from xml-comments
-				o.IncludeXEnumRemarks = true;
+                // add remarks for descriptions from xml-comments
+                o.IncludeXEnumRemarks = true;
 
-				// get descriptions from DescriptionAttribute then from xml-comments
-				o.DescriptionSource = DescriptionSources.DescriptionAttributesThenXmlComments;
+                // get descriptions from DescriptionAttribute then from xml-comments
+                o.DescriptionSource = DescriptionSources.DescriptionAttributesThenXmlComments;
 
-				// new line for enum values descriptions
-				o.NewLine = "\n";
+                // new line for enum values descriptions
+                o.NewLine = "\n";
 
-				// get descriptions from xml-file comments on the specified path
-				// should use "options.IncludeXmlComments(xmlFilePath);" before
-				Array.ForEach(xmlDocs, d => { o.IncludeXmlCommentsFrom(d); });
-			});
-			// Enable openApi Annotations
-			options.EnableAnnotations(true, true);
-			options.DocumentFilter<TagOrderByNameDocumentFilter>();
-			options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
-			options.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
-			options.OperationFilter<OperationIdFilter>();
-			options.OperationFilter<ValidationOperationFilter>();
-			options.OperationFilter<SecurityRequirementsOperationFilter>();
-			options.SupportNonNullableReferenceTypes(); // Sets Nullable flags appropriately.              
-			options.UseAllOfForInheritance(); // Allows $ref objects to be nullable
-		});
-		services.AddFluentValidationRulesToSwagger(options =>
-		{
-			options.SetNotNullableIfMinLengthGreaterThenZero = true;
-		});
-		services.AddRouting(options =>
-		{
-			options.LowercaseUrls = true;
-			options.LowercaseQueryStrings = true;
-			options.AppendTrailingSlash = true;
-		});
+                // get descriptions from xml-file comments on the specified path
+                // should use "options.IncludeXmlComments(xmlFilePath);" before
+                Array.ForEach(xmlDocs, d => { o.IncludeXmlCommentsFrom(d); });
+            });
+            // Enable openApi Annotations
+            options.EnableAnnotations(true, true);
+            options.DocumentFilter<TagOrderByNameDocumentFilter>();
+            options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+            options.SchemaFilter<RequireNonNullablePropertiesSchemaFilter>();
+            options.OperationFilter<OperationIdFilter>();
+            options.OperationFilter<ValidationOperationFilter>();
+            options.OperationFilter<SecurityRequirementsOperationFilter>();
+            options.SupportNonNullableReferenceTypes(); // Sets Nullable flags appropriately.              
+            options.UseAllOfForInheritance(); // Allows $ref objects to be nullable
+        });
+        services.AddFluentValidationRulesToSwagger(options =>
+        {
+            options.SetNotNullableIfMinLengthGreaterThenZero = true;
+        });
+        services.AddRouting(options =>
+        {
+            options.LowercaseUrls = true;
+            options.LowercaseQueryStrings = true;
+            options.AppendTrailingSlash = true;
+        });
 
-		return services;
-	}
+        return services;
+    }
 
-	internal static IServiceCollection AddDatabases(this IServiceCollection services, IConfiguration configuration,
-		IWebHostEnvironment env)
-	{
-		services.AddDbContext<AppDbContext>(options =>
-		{
-			var efConStr = configuration.GetConnectionString("SqlServer") ??
-						   throw new NullReferenceException("Connection string was not found");
-			var contextOptions = options.UseSqlServer(efConStr).SetDefaultDbSettings();
-			if (env.IsDevelopment())
-			{
-				contextOptions.EnableSensitiveDataLogging().EnableDetailedErrors();
-			}
-		});
+    internal static IServiceCollection AddDatabases(this IServiceCollection services, IConfiguration configuration,
+        IWebHostEnvironment env)
+    {
+        services.AddDbContext<AppDbContext>(options =>
+        {
+            var efConStr = configuration.GetConnectionString("SqlServer") ??
+                           throw new NullReferenceException("Connection string was not found");
+            var contextOptions = options.UseSqlServer(efConStr).SetDefaultDbSettings();
+            if (env.IsDevelopment())
+            {
+                contextOptions.EnableSensitiveDataLogging().EnableDetailedErrors();
+            }
+        });
 
-		return services;
-	}
+        return services;
+    }
 
-	internal static IServiceCollection AddRepositories(this IServiceCollection services)
-	{
-		services.AddScoped<ICategoryRepo, CategoryRepo>();
-		services.AddScoped<IProductRepo, ProductRepo>();
-		services.AddScoped<IProductImageRepo, ProductImageRepo>();
+    internal static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<ICategoryRepo, CategoryRepo>();
+        services.AddScoped<IProductRepo, ProductRepo>();
+        services.AddScoped<IProductImageRepo, ProductImageRepo>();
 
-		return services;
-	}
+        return services;
+    }
 
-	internal static IServiceCollection AddServices(this IServiceCollection services)
-	{
-		return services;
-	}
+    internal static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        return services;
+    }
 
-	internal static IServiceCollection AddMapster(this IServiceCollection services)
-	{
-		var config = TypeAdapterConfig.GlobalSettings;
-		config.Scan(typeof(ProductProfile).Assembly);
-		services.AddSingleton(config);
-		services.AddScoped<IMapper, ServiceMapper>();
+    internal static IServiceCollection AddMapster(this IServiceCollection services)
+    {
+        var config = TypeAdapterConfig.GlobalSettings;
+        config.Scan(typeof(ProductProfile).Assembly);
+        services.AddSingleton(config);
+        services.AddScoped<IMapper, ServiceMapper>();
 
-		return services;
-	}
+        return services;
+    }
 
-	internal static IServiceCollection AddMediatorService(this IServiceCollection services)
-	{
-		services.AddMediator(opt =>
-		{
-			opt.ServiceLifetime = ServiceLifetime.Scoped;
-		});
-		return services;
-	}
+    internal static IServiceCollection AddMediatorService(this IServiceCollection services)
+    {
+        services.AddMediator(opt =>
+        {
+            opt.ServiceLifetime = ServiceLifetime.Scoped;
+        });
+        return services;
+    }
 
-	public static DbContextOptionsBuilder SetDefaultDbSettings(this DbContextOptionsBuilder builder)
-	{
-		builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-		return builder;
-	}
+    public static DbContextOptionsBuilder SetDefaultDbSettings(this DbContextOptionsBuilder builder)
+    {
+        builder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+        return builder;
+    }
 }

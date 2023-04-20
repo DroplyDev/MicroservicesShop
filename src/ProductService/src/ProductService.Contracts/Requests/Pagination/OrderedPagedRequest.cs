@@ -1,8 +1,5 @@
-﻿region
+﻿using ProductService.Contracts.SubTypes;
 
-using ProductService.Contracts.SubTypes;
-
-#endregion
 
 // ReSharper disable All
 

@@ -1,10 +1,6 @@
-﻿region
-
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using ProductService.Contracts.Responses;
 using Rusty.Template.Contracts.Requests;
-
-#endregion
 
 namespace ProductService.Application.Repositories.BaseRepo;
 
