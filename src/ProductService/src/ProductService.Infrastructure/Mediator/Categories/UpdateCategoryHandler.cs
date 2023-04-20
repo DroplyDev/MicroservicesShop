@@ -1,18 +1,14 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using FluentValidation;
+﻿using FluentValidation;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Categories;
-using ProductService.Contracts.Responses;
 using ProductService.Domain;
 using ProductService.Domain.Exceptions.Entity;
-using ProductService.Infrastructure.Requests.Categories;
 
-namespace ProductService.Infrastructure.Handlers.Categories;
+namespace ProductService.Infrastructure.Mediator.Categories;
+
+public sealed record UpdateCategoryRequest(int Id, CategoryUpdateDto Dto) : IActionRequest;
 
 public sealed record UpdateCategoryHandler : IActionRequestHandler<UpdateCategoryRequest>
 {

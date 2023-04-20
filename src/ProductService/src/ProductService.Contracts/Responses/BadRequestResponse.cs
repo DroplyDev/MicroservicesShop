@@ -1,8 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#region
+﻿region
 
 using FluentValidation.Results;
 
@@ -19,10 +15,12 @@ public sealed class BadRequestResponse
     {
         Errors = errors;
     }
+
     public BadRequestResponse(IEnumerable<ValidationFailure> validationFailures)
     {
         ParseFailures(validationFailures);
     }
+
     public BadRequestResponse(ValidationResult validationResult)
     {
         ParseFailures(validationResult.Errors);
@@ -32,6 +30,9 @@ public sealed class BadRequestResponse
     {
         Errors = new List<ValidationResponse>();
     }
+
+    public List<ValidationResponse> Errors { get; set; } = null!;
+
     private void ParseFailures(IEnumerable<ValidationFailure> validationFailures)
     {
         Errors = validationFailures.Select(e => new ValidationResponse
@@ -42,5 +43,4 @@ public sealed class BadRequestResponse
             FormattedMessagePlaceholderValues = e.FormattedMessagePlaceholderValues
         }).ToList();
     }
-    public List<ValidationResponse> Errors { get; set; } = null!;
 }

@@ -1,7 +1,7 @@
 ﻿using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ProductService.Infrastructure.Requests;
+namespace ProductService.Infrastructure.Mediator;
 
 public interface IActionRequest : IRequest<IActionResult>
 {

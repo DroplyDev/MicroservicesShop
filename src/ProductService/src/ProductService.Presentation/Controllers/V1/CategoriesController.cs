@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProductService.Contracts.Dtos.Categories;
 using ProductService.Contracts.Requests.Pagination;
 using ProductService.Contracts.Responses;
-using ProductService.Infrastructure.Requests.Categories;
+using ProductService.Infrastructure.Mediator.Categories;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ProductService.Presentation.Controllers.V1;

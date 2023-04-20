@@ -2,7 +2,7 @@
   "Routes": [
     {
       "UpstreamPathTemplate": "/gateway/products/paged",
-      "UpstreamHttpMethod": [ "Post" ],
+      "UpstreamHttpMethod": ["Post"],
       "DownstreamPathTemplate": "/api/products/paged",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -14,7 +14,7 @@
     },
     {
       "UpstreamPathTemplate": "/gateway/articles/{id}",
-      "UpstreamHttpMethod": [ "Get", "Delete" ],
+      "UpstreamHttpMethod": ["Get", "Delete"],
       "DownstreamPathTemplate": "/api/articles/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [

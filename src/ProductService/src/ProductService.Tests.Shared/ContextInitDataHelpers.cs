@@ -1,9 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using AutoBogus;
-using Bogus;
+﻿using AutoBogus;
 using Microsoft.EntityFrameworkCore;
 using ProductService.Domain;
 
@@ -11,11 +6,6 @@ namespace ProductService.Tests.Shared;
 
 public static class ContextInitDataHelpers
 {
-    static ContextInitDataHelpers()
-    {
-        Randomizer.Seed = new Random(1);
-    }
-
     public static List<Category> InitCategories(this DbContext context, int categoryCount = 5)
     {
         var data = new AutoFaker<Category>()

@@ -1,23 +1,17 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using Mapster;
+﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using ProductService.Application.Caching;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.Products;
-using ProductService.Domain;
-using ProductService.Infrastructure.Extensions;
-using ProductService.Infrastructure.Requests.Products;
 
-namespace ProductService.Infrastructure.Handlers.Products;
+namespace ProductService.Infrastructure.Mediator.Products;
+
+public sealed record GetProductByIdRequest(int Id) : IActionRequest;
 
 public sealed record GetProductByIdHandler : IActionRequestHandler<GetProductByIdRequest>
 {
-    private readonly IProductRepo _productRepo;
     private readonly ICacheService _cacheService;
+    private readonly IProductRepo _productRepo;
 
     public GetProductByIdHandler(IProductRepo productRepo, ICacheService cacheService)
     {

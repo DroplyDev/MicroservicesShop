@@ -1,6 +1,4 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProductService.Application.Repositories;
 using ProductService.Contracts.Dtos.ProductImage;
 using ProductService.Contracts.Responses;

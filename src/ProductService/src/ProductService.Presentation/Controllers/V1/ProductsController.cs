@@ -6,7 +6,7 @@ using ProductService.Contracts.Dtos.Products;
 using ProductService.Contracts.Requests.Pagination;
 using ProductService.Contracts.Responses;
 using ProductService.Infrastructure.Attributes;
-using ProductService.Infrastructure.Requests.Products;
+using ProductService.Infrastructure.Mediator.Products;
 using Swashbuckle.AspNetCore.Annotations;
 
 #endregion

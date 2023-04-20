@@ -26,15 +26,33 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseGenericR
     }
 
 
+    public virtual void UpdateNoSave(TEntity entity)
+    {
+        DbSet.Update(entity);
+    }
+
+
+    public virtual void Attach(TEntity entity)
+    {
+        DbSet.Attach(entity);
+    }
+
+
+    public virtual void DeleteNoSave(TEntity entity)
+    {
+        DbSet.Remove(entity);
+    }
+
+
     public async Task<TEntity> GetByIdAsync(object id, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FindAsync(new[] { id }, cancellationToken) ??
+        return await DbSet.FindAsync(new[] {id}, cancellationToken) ??
                throw new EntityNotFoundByIdException<TEntity>(id);
     }
 
     public async Task<TEntity?> GetByIdOrDefaultAsync(object id, CancellationToken cancellationToken = default)
     {
-        return await DbSet.FindAsync(new[] { id }, cancellationToken);
+        return await DbSet.FindAsync(new[] {id}, cancellationToken);
     }
 
     public async Task<TEntity> AddAsync(TEntity entity)
@@ -72,12 +90,6 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseGenericR
     }
 
 
-    public virtual void UpdateNoSave(TEntity entity)
-    {
-        DbSet.Update(entity);
-    }
-
-
     public Task UpdateRangeAsync(IEnumerable<TEntity> entities)
     {
         UpdateRangeNoSave(entities);
@@ -88,12 +100,6 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseGenericR
     public virtual void UpdateRangeNoSave(IEnumerable<TEntity> entities)
     {
         DbSet.UpdateRange(entities);
-    }
-
-
-    public virtual void Attach(TEntity entity)
-    {
-        DbSet.Attach(entity);
     }
 
     public virtual void AttachRange(IEnumerable<TEntity> entities)
@@ -115,12 +121,6 @@ public abstract partial class BaseGenericRepo<TContext, TEntity> : IBaseGenericR
 
         DeleteNoSave(entity);
         await SaveChangesAsync();
-    }
-
-
-    public virtual void DeleteNoSave(TEntity entity)
-    {
-        DbSet.Remove(entity);
     }
 
 

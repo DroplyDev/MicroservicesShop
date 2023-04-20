@@ -1,9 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-using Microsoft.EntityFrameworkCore;
-using ProductService.Contracts.SubTypes;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace ProductService.Tests.Integration.V1.CategoriesController;
 
@@ -24,7 +19,7 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
         {
             FilterData = null,
             PageData = null,
-            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
+            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
         };
         //Act
         var response = await Client.GetFilteredPagedCategoriesAsync(request);
@@ -50,7 +45,7 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
         {
             FilterData = null,
             PageData = null,
-            OrderByData = new OrderByData { OrderBy = "", OrderDirection = OrderDirection.Desc }
+            OrderByData = new OrderByData {OrderBy = "", OrderDirection = OrderDirection.Desc}
         };
         //Act
         var response = () => Client.GetFilteredPagedCategoriesAsync(request);
@@ -76,8 +71,8 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
         var request = new FilterOrderPageRequest
         {
             FilterData = null,
-            PageData = new PageOptions { Offset = 1, Limit = 2 },
-            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
+            PageData = new PageOptions {Offset = 1, Limit = 2},
+            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
         };
         //Act
 
@@ -102,8 +97,8 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
         var request = new FilterOrderPageRequest
         {
             FilterData = null,
-            PageData = new PageOptions { Offset = -1, Limit = -1 },
-            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
+            PageData = new PageOptions {Offset = -1, Limit = -1},
+            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
         };
         //Act
         var response = () => Client.GetFilteredPagedCategoriesAsync(request);
@@ -128,8 +123,8 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
 
         var request = new FilterOrderPageRequest
         {
-            FilterData = new FilterByDateOptions { DateFrom = DateTime.MinValue, DateTo = DateTime.Now },
-            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
+            FilterData = new FilterByDateOptions {DateFrom = DateTime.MinValue, DateTo = DateTime.Now},
+            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
         };
         //Act
 
@@ -152,8 +147,9 @@ public sealed class CategoryPaginationTests : BaseCategoriesTest
         context.InitCategories();
         var request = new FilterOrderPageRequest
         {
-            FilterData = new FilterByDateOptions { DateFrom = DateTime.Now.AddDays(1), DateTo = DateTime.Now.AddDays(-1) },
-            OrderByData = new OrderByData { OrderBy = "Name", OrderDirection = OrderDirection.Desc }
+            FilterData =
+                new FilterByDateOptions {DateFrom = DateTime.Now.AddDays(1), DateTo = DateTime.Now.AddDays(-1)},
+            OrderByData = new OrderByData {OrderBy = "Name", OrderDirection = OrderDirection.Desc}
         };
         //Act
         var response = () => Client.GetFilteredPagedCategoriesAsync(request);

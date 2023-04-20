@@ -1,11 +1,9 @@
 ﻿#region
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using ProductService.Contracts.Responses;
 using ProductService.Domain.Exceptions;
 using Serilog;
@@ -36,7 +34,6 @@ public sealed class ExceptionHandlingMiddleware
         }
         catch (ValidationException ex)
         {
-
             _logger.Warning(ex, ex.Message);
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             context.Response.ContentType = ContentType;
